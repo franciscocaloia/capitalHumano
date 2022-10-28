@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import b1.capitalHumano.puesto.PuestoDAOImp;
+
 /**
  * JavaFX App
  */

@@ -8,10 +8,13 @@ import java.util.List;
 import org.hibernate.MappingException;
 
 public interface PuestoDAO {
-	public void insert(Puesto puesto) throws MappingException, IOException;
+	public static void insert(Puesto puesto) throws MappingException, IOException {
+	}
 	public void update(Puesto puesto);
 	public void delete(Integer id);
-	public List<PuestoDTO> getAllInstances();
+	public static List<PuestoDTO> getAllInstances() {
+		return null;
+	}
 	public List<PuestoDTO> getByFilter(Empresa empresa);
 	public List<PuestoDTO> getByFilter(String texto);
 	public Puesto getById(Integer id);
