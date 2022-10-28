@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<DialogPane prefWidth="300.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="b1.capitalHumano.puesto.ControllerPuesto">
+<DialogPane prefWidth="300.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" >
    <header>
       <Text fill="#727272" strokeType="OUTSIDE" strokeWidth="0.0" text="Dar de alta Puesto">
          <font>
@@ -38,13 +38,13 @@
             <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="20.0" prefHeight="50.0" prefWidth="200.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Código (*)" wrappingWidth="68.64453125" />
-                  <TextField alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="150.0" />
+                  <TextField fx:id="codigoInput" alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="150.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="20.0" prefHeight="50.0" prefWidth="200.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre del Puesto (*)" wrappingWidth="69.64453125" />
-                  <TextField alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="150.0" />
+                  <TextField fx:id="nombreInput" alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="150.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="110.0" prefHeight="50.0" prefWidth="200.0">
@@ -53,13 +53,13 @@
                      <font>
                         <Font size="11.0" />
                      </font></Text>
-                  <TextField alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="150.0" />
+                  <TextField fx:id="descripcionInput" alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="150.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="140.0" prefHeight="50.0" prefWidth="200.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Empresa (*)" wrappingWidth="71.64453125" />
-                  <ChoiceBox prefWidth="150.0" />
+                  <ChoiceBox fx:id="empresaChoice" prefWidth="150.0" />
                </children>
             </HBox>
             <VBox style="-fx-border-color: black;">

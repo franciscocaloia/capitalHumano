@@ -47,7 +47,7 @@ public Puesto(Integer idPuesto, String nombrePuesto, String descripcion, Empresa
 	}
 	
 	public String getNombreEmpresa() {
-		return this.empresa.getNombre();
+		return this.empresa.getNombreEmpresa();
 	}
 
 	public Boolean getEliminado() {

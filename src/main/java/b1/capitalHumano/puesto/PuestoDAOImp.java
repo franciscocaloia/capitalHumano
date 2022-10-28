@@ -7,8 +7,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import b1.capitalHumano.Empresa;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 public class PuestoDAOImp implements PuestoDAO {
 
@@ -20,40 +25,47 @@ public class PuestoDAOImp implements PuestoDAO {
 		return null;
 	};
 
-	public List<PuestoDTO> getByFilter(Empresa empresa)  {
+	public List<PuestoDTO> getByFilter(Empresa empresa) {
 		return null;
 	}
 
-	public List<PuestoDTO> getAllInstances(){
-		return null;
+	public static List<PuestoDTO> getAllInstances() {
+		Session session = new Configuration().configure().addAnnotatedClass(PuestoDTO.class).buildSessionFactory()
+				.openSession();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<PuestoDTO> criteriaQuery = criteriaBuilder.createQuery(PuestoDTO.class);
+		Root<PuestoDTO> root = criteriaQuery.from(PuestoDTO.class);
+		criteriaQuery.select(root);
+		Query<PuestoDTO> query = session.createQuery(criteriaQuery);
+		List<PuestoDTO> Puestos = query.getResultList();
+		return Puestos;
+
 	}
 
 	public void delete(Integer id) {
 	}
 
 	public void update(Puesto puesto) {
-		PuestoDTO puestoDTO = new PuestoDTO(puesto.getIdPuesto(), puesto.empresa.getId(), puesto.getNombrePuesto(),
-				puesto.getDescripcionPuesto(), puesto.getEliminado());
+
 	}
 
-	public void insert(Puesto puesto) throws MappingException, IOException 
-	{
-		PuestoDTO puestoDTO = new PuestoDTO(1, puesto.empresa.getId(), puesto.getNombrePuesto(),
+	public static void insert(Puesto puesto) throws MappingException, IOException {
+		PuestoDTO puestoDTO = new PuestoDTO(puesto.getIdPuesto(), puesto.empresa.getIdEmpresa(), puesto.getNombrePuesto(),
 				puesto.getDescripcionPuesto(), puesto.getEliminado());
-      SessionFactory sessionFactory = new Configuration().configure().addAnnotatedClass(PuestoDTO.class).buildSessionFactory();
-      Session session = sessionFactory.openSession();
-     Transaction tx = session.getTransaction();
-       try {
-           tx = session.getTransaction();
-           tx.begin();
-            session.persist(puestoDTO);
-           tx.commit();
-       } catch (RuntimeException e) {
-           tx.rollback();
-           throw e;
+		Session session = new Configuration().configure().addAnnotatedClass(PuestoDTO.class).buildSessionFactory()
+				.openSession();
+		Transaction tx = session.getTransaction();
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			session.persist(puestoDTO);
+			tx.commit();
+		} catch (RuntimeException e) {
+			tx.rollback();
+			throw e;
 
-       } finally {
-           session.close();
-        }
+		} finally {
+			session.close();
+		}
 	}
 }
