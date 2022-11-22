@@ -121,7 +121,6 @@ public class StudentsController {
     	StudentRepository.saveStudents(studentsOL.toArray(new Student[studentsOL.size()]));
     	showInformationDialog("Confirmation", "", "Students saved successfuly.");
     }
-
     //Auto called when the view is created
     public void initialize() {
 		//Initialize the list of students and pass it to studentsTable to display it

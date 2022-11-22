@@ -1,47 +1,31 @@
 package b1.capitalHumano.puesto;
 
 import java.util.List;
+import java.util.Set;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import b1.capitalHumano.Empresa;
-import b1.capitalHumano.Caracteristicas;
+import b1.capitalHumano.empresa.Empresa;
 
 
-@Entity(name="Puesto")
-@Table(name="Puesto")
 public class PuestoDTO {
-	
-	public PuestoDTO(Integer idPuesto,Integer idEmpresa,String nombrePuesto, String descripción,Boolean eliminado) {
+	public PuestoDTO(Integer idPuesto,String nombrePuesto,Integer idEmpresa,String nombreEmpresa, String descripción,Boolean eliminado) {
 		this.idPuesto = idPuesto;
 		this.idEmpresa = idEmpresa;
+		this.nombreEmpresa = nombreEmpresa;
 		this.nombrePuesto = nombrePuesto;
-		this.descripción = descripción;
+		this.descripcionPuesto = descripción;
 		this.eliminado = eliminado;
 	}
-	public PuestoDTO() {
-			//no eliminar este lo requiere hibernate
+    public PuestoDTO() {
+		// TODO Auto-generated constructor stub
 	}
-
-//    private List<Caracteristicas> caracteristicas;
-    @Id
-  //  @GeneratedValue
-    @Column(name="idPuesto")
-    private int idPuesto;
-    @Column(name="idEmpresa")
-    private int idEmpresa; 
-    @Column(name="nombrePuesto")
+	private int idPuesto;
+    private int idEmpresa;
+    private String nombreEmpresa;
     private String nombrePuesto;
-	@Column(name="descripción")
-    private String descripción;
-    @Column(name="eliminado")
+    private String descripcionPuesto;
     private boolean eliminado;
-
+    private Set<PonderacionNecesariaDTO> caracteristicasDTO;
+    
 	   public int getIdPuesto() {
 			return idPuesto;
 		}
@@ -54,22 +38,34 @@ public class PuestoDTO {
 		public void setIdEmpresa(int idEmpresa) {
 			this.idEmpresa = idEmpresa;
 		}
+		public String getNombreEmpresa() {
+			return this.nombreEmpresa;
+		}
+		public void setNombreEmpresa(String nombreEmpresa) {
+			this.nombreEmpresa = nombreEmpresa;
+		}
 		public String getNombrePuesto() {
 			return nombrePuesto;
 		}
 		public void setNombrePuesto(String nombrePuesto) {
 			this.nombrePuesto = nombrePuesto;
 		}
-		public String getDescripción() {
-			return descripción;
+		public String getDescripcionPuesto() {
+			return descripcionPuesto;
 		}
-		public void setDescripción(String descripción) {
-			this.descripción = descripción;
+		public void setDescripcionPuesto(String descripción) {
+			this.descripcionPuesto = descripción;
 		}
 		public boolean isEliminado() {
 			return eliminado;
 		}
 		public void setEliminado(boolean eliminado) {
 			this.eliminado = eliminado;
+		}
+		public void setCaracteristicasDTO(Set<PonderacionNecesariaDTO> caracteristicasDTO) {
+			this.caracteristicasDTO=caracteristicasDTO;
+		}
+		public Set<PonderacionNecesariaDTO> getCaracteristicasDTO() {
+			return this.caracteristicasDTO;
 		}
 }

@@ -9,7 +9,8 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
-import b1.capitalHumano.Empresa;
+import b1.capitalHumano.competencia.Competencia;
+import b1.capitalHumano.empresa.Empresa;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -22,27 +23,31 @@ public class PuestoDAOImp implements PuestoDAO {
 	};
 
 	public Puesto getById(Integer id) {
-		return null;
+		Session session = new Configuration().configure().addAnnotatedClass(Puesto.class).buildSessionFactory()
+				.openSession();
+		Puesto puesto = session.get(Puesto.class, id);
+		return puesto;
 	};
 
 	public List<PuestoDTO> getByFilter(Empresa empresa) {
 		return null;
 	}
-
-	public static List<PuestoDTO> getAllInstances() {
-		Session session = new Configuration().configure().addAnnotatedClass(PuestoDTO.class).buildSessionFactory()
+//PonderacionNecesaria
+	public static List<Puesto> getAllInstances() {
+		Session session = new Configuration().configure().addAnnotatedClass(Puesto.class).addAnnotatedClass(PonderacionNecesaria.class).addAnnotatedClass(Competencia.class).addAnnotatedClass(Empresa.class).buildSessionFactory()
 				.openSession();
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-		CriteriaQuery<PuestoDTO> criteriaQuery = criteriaBuilder.createQuery(PuestoDTO.class);
-		Root<PuestoDTO> root = criteriaQuery.from(PuestoDTO.class);
+		CriteriaQuery<Puesto> criteriaQuery = criteriaBuilder.createQuery(Puesto.class);
+		Root<Puesto> root = criteriaQuery.from(Puesto.class);
 		criteriaQuery.select(root);
-		Query<PuestoDTO> query = session.createQuery(criteriaQuery);
-		List<PuestoDTO> Puestos = query.getResultList();
-		return Puestos;
-
+		Query<Puesto> query = session.createQuery(criteriaQuery);
+		List<Puesto> puestos = query.getResultList();
+		session.close();
+		return puestos;
 	}
 
 	public void delete(Integer id) {
+		
 	}
 
 	public void update(Puesto puesto) {
@@ -50,15 +55,13 @@ public class PuestoDAOImp implements PuestoDAO {
 	}
 
 	public static void insert(Puesto puesto) throws MappingException, IOException {
-		PuestoDTO puestoDTO = new PuestoDTO(puesto.getIdPuesto(), puesto.empresa.getIdEmpresa(), puesto.getNombrePuesto(),
-				puesto.getDescripcionPuesto(), puesto.getEliminado());
-		Session session = new Configuration().configure().addAnnotatedClass(PuestoDTO.class).buildSessionFactory()
+		Session session = new Configuration().configure().addAnnotatedClass(Puesto.class).addAnnotatedClass(PonderacionNecesaria.class).addAnnotatedClass(Competencia.class).addAnnotatedClass(Empresa.class).buildSessionFactory()
 				.openSession();
 		Transaction tx = session.getTransaction();
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			session.persist(puestoDTO);
+			session.persist(puesto);
 			tx.commit();
 		} catch (RuntimeException e) {
 			tx.rollback();

@@ -1,28 +1,56 @@
 package b1.capitalHumano.puesto;
 
 import java.util.ArrayList;
+import java.util.Set;
 
-import b1.capitalHumano.Empresa;
-import b1.capitalHumano.PonderacionNecesaria;
+import b1.capitalHumano.empresa.Empresa;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
+@Entity(name="Puesto")
+@Table(name="puesto")
 public class Puesto {
 
-	Integer idPuesto;
+@Id
+@Column(name="idPuesto")
+Integer idPuesto;
+@Column(name="nombrePuesto")
  String nombrePuesto;
+@Column(name="descripcion")
  String descripcionPuesto;
+@ManyToOne
+@JoinColumn(name = "idEmpresa")
  Empresa empresa;
+@Column(name="eliminado")
  Boolean eliminado;
- ArrayList<PonderacionNecesaria> caracteristicas;
+@OneToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER,orphanRemoval = true,targetEntity=PonderacionNecesaria.class)
+@JoinColumn(name="idPuesto")
+@MapsId
+Set<PonderacionNecesaria> caracteristicas;
 
-public Puesto(Integer idPuesto, String nombrePuesto, String descripcion, Empresa empresa) {
+public Puesto(Integer idPuesto, String nombrePuesto, String descripcion, Empresa empresa,Set<PonderacionNecesaria> caracteristicas) {
 	this.idPuesto = idPuesto;
 	this.nombrePuesto = nombrePuesto;
 	this.descripcionPuesto = descripcion;
 	this.empresa = empresa;
 	this.eliminado = false;
+	this.caracteristicas = caracteristicas;
 	}
 
- public Integer getIdPuesto() {
+ public Puesto() {
+	 this.eliminado=false;
+}
+
+public Integer getIdPuesto() {
 		return idPuesto;
 	}
 
@@ -46,11 +74,22 @@ public Puesto(Integer idPuesto, String nombrePuesto, String descripcion, Empresa
 		this.descripcionPuesto = descripcion;
 	}
 	
-	public String getNombreEmpresa() {
-		return this.empresa.getNombreEmpresa();
-	}
 
 	public Boolean getEliminado() {
 		return this.eliminado;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa=empresa;
+	}
+	public Empresa getEmpresa() {
+		return this.empresa;
+	}
+	public Set<PonderacionNecesaria> getCaracteristicas(){
+		return this.caracteristicas;
+	}
+	
+	public void setCaracteristicas(Set<PonderacionNecesaria> caracteristicas) {
+		this.caracteristicas = caracteristicas;
 	}
 }

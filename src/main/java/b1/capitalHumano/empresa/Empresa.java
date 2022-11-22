@@ -1,22 +1,19 @@
-package b1.capitalHumano;
+package b1.capitalHumano.empresa;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 @Entity(name="Empresa")
-@Table(name="Empresa")
+@Table(name="empresa")
 public class Empresa {
-
-
 	@Id
 	@Column(name="idEmpresa")
 	private Integer idEmpresa;
 	@Column(name="nombre")
 	private String nombreEmpresa;
+	
 	public Empresa() {
 	// nno eliminar hibernate pide constructor vacio
 	}
@@ -49,5 +46,4 @@ public class Empresa {
 	    public String toString() {
 	        return nombreEmpresa;
 	    }
-	
 }

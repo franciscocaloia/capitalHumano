@@ -13,4 +13,12 @@ module b1.capitalHumano {
     
     opens b1.capitalHumano.puesto to javafx.fxml,org.hibernate.orm.core;
     exports b1.capitalHumano.puesto;
+    
+    opens b1.capitalHumano.competencia to javafx.fxml,org.hibernate.orm.core;
+    exports b1.capitalHumano.competencia;
+    
+    opens b1.capitalHumano.empresa to javafx.fxml,org.hibernate.orm.core;
+    exports b1.capitalHumano.empresa;
+    
+    
 }
