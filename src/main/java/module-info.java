@@ -19,6 +19,6 @@ module b1.capitalHumano {
     
     opens b1.capitalHumano.empresa to javafx.fxml,org.hibernate.orm.core;
     exports b1.capitalHumano.empresa;
-    
+      
     
 }
