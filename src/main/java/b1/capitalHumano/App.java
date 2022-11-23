@@ -9,27 +9,35 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import b1.capitalHumano.puesto.PuestoDAOImp;
+import b1.capitalHumano.usuario.ControllerGraficoAutenticarUsuario;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
-
+	 private static FXMLLoader fxmlLoader;
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("puesto/GestionarPuesto--Inicio"));
+    	 scene = new Scene(loadFXML("usuario/AutenticacionDeUsuario--inicio"));
+    	 
+    	 //pasar stage a la clase controller
+    	 ControllerGraficoAutenticarUsuario controllerGrafico = (ControllerGraficoAutenticarUsuario)fxmlLoader.getController();
+    	 controllerGrafico.setStageAndSetupListeners(stage);
+    	 //////////////////////
+       // scene = new Scene(loadFXML("puesto/GestionarPuesto--Inicio"));
         stage.setScene(scene);
         stage.show();
+
     }
 
-    static void setRoot(String fxml) throws IOException {
+    private static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+         fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 

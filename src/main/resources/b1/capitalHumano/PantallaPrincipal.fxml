@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" scaleShape="false" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="b1.capitalHumano.consultor.ControllerGraficoPantallaPrincipal">
+   <children>
+      <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Capit@l Humano" />
+            <Text layoutX="734.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consultor" />
+            <Text fx:id="textoPrincipal" layoutX="222.0" layoutY="218.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Bienvenido &lt;Usuario.nombre&gt;">
+               <font>
+                  <Font name="Consolas Bold" size="24.0" />
+               </font>
+            </Text>
+            <MenuBar focusTraversable="false" layoutY="41.0" prefHeight="25.0" prefWidth="800.0">
+               <menus>
+                  <Menu mnemonicParsing="false" text="Inicio" />
+                  <Menu mnemonicParsing="false" text="Candidatos">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Gestionar" />
+                        <MenuItem mnemonicParsing="false" text="Importar" />
+                        <MenuItem mnemonicParsing="false" text="Evaluar" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Datos Basicos">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Gestionar Competencias" />
+                        <MenuItem mnemonicParsing="false" text="Gestionar Factores" />
+                        <MenuItem mnemonicParsing="false" text="Gestionar Preguntas" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Evaluaciones">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Gestionar Puesto" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Salidas">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Exportar Resultados" />
+                        <MenuItem mnemonicParsing="false" text="Emitir Reporte Comparativo" />
+                        <MenuItem mnemonicParsing="false" text="Emitir Orden de Merito" />
+                     </items>
+                  </Menu>
+               </menus>
+            </MenuBar>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
