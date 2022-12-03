@@ -23,7 +23,9 @@ public static ConsultorDTO autenticarConsultor( ConsultorDTO consultorDTO) {
 	ConsultorDAO consultorDaoImp =  new ConsultorDAOImp();
 
   try {
+
 		consultor = consultorDaoImp.getByFilter(consultorDTO.getNombre());
+		//System.out.println(consultor.getNombre());
 	} catch (MappingException | IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -33,28 +35,24 @@ public static ConsultorDTO autenticarConsultor( ConsultorDTO consultorDTO) {
 
 		return null;
 	}
-
 	return new ConsultorDTO(consultor);
-	
 }
-
 public static CuestionarioDTO autenticarCandidato( CandidatoDTO candidatoDTO) {
 	Candidato candidato = null;
 	CandidatoDAO candidatoDAOImp =  new CandidatoDAOImp();
-try {
 
-	candidato = candidatoDAOImp.getByFilter(candidatoDTO.getDNI());
-	//CAPAZ NO TIENE QUE SER ESTATICA
-} catch (MappingException | IOException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
-} 
+	//AGREGAR EN DIAGRAMA DE SECUENCIA GETTIPO
+
+	candidato = candidatoDAOImp.getByFilter(candidatoDTO.getDNI(),candidatoDTO.getTipo());
+
+
 
 if(candidato == null ||!candidato.getClave().equals(candidatoDTO.getClave())) {
 	return null;
 }
 
 Cuestionario cuestionario = candidato.getActivo();
+
 if (cuestionario == null) {
 	return null;
 }

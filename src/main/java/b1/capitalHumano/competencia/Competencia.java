@@ -1,16 +1,23 @@
 package b1.capitalHumano.competencia;
 
 
+import java.util.Set;
+
+import b1.capitalHumano.puesto.PonderacionNecesaria;
+import b1.capitalHumano.puesto.Puesto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
 
 @Entity(name="Competencia")
 @Table(name="competencia")
 public class Competencia {
 	@Id
-	@Column(name="idComp")
+	@Column(name="idComp", nullable = false )
 	Integer idComp;
 	@Column(name="nombreComp")
 	String nombreComp;
@@ -18,9 +25,13 @@ public class Competencia {
 	String descripcion;
 	@Column(name="eliminado")
 	Boolean eliminado;
-//	@ManyToOne
-//	@JoinColumn(name = "idPuesto")
-//	ArrayList<Integer> idDactores;
+	
+
+	//@OneToMany
+	//@JoinColumn(name = "idComp")
+	//Set<PonderacionNecesaria> listaPonderacion ;
+
+//	ArrayList<Integer> idDactores
 //	ArrayList<Factor> factores;
 	public Competencia(){
 	}

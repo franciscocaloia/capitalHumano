@@ -9,13 +9,19 @@ import b1.capitalHumano.candidato.CandidatoDTO;
 import b1.capitalHumano.consultor.Consultor;
 import b1.capitalHumano.consultor.ConsultorDTO;
 import b1.capitalHumano.consultor.ControllerGraficoPantallaPrincipal;
+import b1.capitalHumano.puesto.ControllerGraficoPuestoModificar_Dialog;
+import b1.capitalHumano.puesto.ControllerGraficoPuestos;
 import b1.capitalHumano.puesto.ControllerGraficoPuestos_Dialog;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
@@ -25,6 +31,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class ControllerGraficoAutenticarUsuario {
 
@@ -39,13 +46,15 @@ public class ControllerGraficoAutenticarUsuario {
 	@FXML
 	ComboBox<String> tipo;
 
-	private static Stage stage;
+	public static Stage stage;
 	private static FXMLLoader fxmlLoader;
 
 	public void initialize() {
 		if (tipo != null) {
-			tipo.setItems(FXCollections.observableArrayList(new String("DNI"), new String("CUIT")));
+			tipo.setItems(FXCollections.observableArrayList(new String("DNI"), new String("LE"), new String("LC"),
+					new String("PP")));
 		}
+
 	}
 
 	public void setStageAndSetupListeners(Stage stage) {
@@ -71,33 +80,69 @@ public class ControllerGraficoAutenticarUsuario {
 	public void iniciarSesion() {
 
 		ConsultorDTO consultorDTO = new ConsultorDTO();
-		consultorDTO.setNombre(usuario.getText());
-		consultorDTO.setContraseña(contraseña.getText());
-		ConsultorDTO consultorDTOAutenticado = ControllerUsuarios.autenticarConsultor(consultorDTO);
 
-		if (consultorDTOAutenticado == null) {
-			try {
-				stage.getScene().setRoot(loadFXML("usuario/AutenticacionDeUsuario--ErrorInicioSesión"));
+		if (usuario.getText().isEmpty() && contraseña.getText().isEmpty()) {
 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (!usuario.getStyleClass().contains("inputError")) {
+				usuario.getStyleClass().add("inputError");
 			}
 
+			if (!contraseña.getStyleClass().contains("inputError")) {
+				contraseña.getStyleClass().add("inputError");
+
+			}
+
+		} else if (contraseña.getText().isEmpty()) {
+
+			if (usuario.getStyleClass().contains("inputError")) {
+				usuario.getStyleClass().remove("inputError");
+			}
+			if (!contraseña.getStyleClass().contains("inputError")) {
+				contraseña.getStyleClass().add("inputError");
+			}
+
+		} else if (usuario.getText().isEmpty()) {
+			if (!usuario.getStyleClass().contains("inputError")) {
+				usuario.getStyleClass().add("inputError");
+			}
+			if (contraseña.getStyleClass().contains("inputError")) {
+				contraseña.getStyleClass().remove("inputError");
+			}
 		} else {
+			// usuario.getStyleClass().remove("inputError");
+			// contraseña.getStyleClass().remove("inputError");
+			if (usuario.getStyleClass().contains("inputError")) {
+				usuario.getStyleClass().remove("inputError");
+			}
+			if (contraseña.getStyleClass().contains("inputError")) {
+				contraseña.getStyleClass().remove("inputError");
+			}
+			consultorDTO.setNombre(usuario.getText());
+			consultorDTO.setContraseña(contraseña.getText());
+			ConsultorDTO consultorDTOAutenticado = ControllerUsuarios.autenticarConsultor(consultorDTO);
 
-			try {
+			if (consultorDTOAutenticado == null) {
 
-				stage.getScene().setRoot(loadFXML("PantallaPrincipal"));
-				ControllerGraficoPantallaPrincipal controllerGraficoPantallaPrincipal = (ControllerGraficoPantallaPrincipal) fxmlLoader
-						.getController();
-				// pasar datos al controller de la nueva scene/root
-				controllerGraficoPantallaPrincipal.setConsultor(consultorDTOAutenticado);
-				controllerGraficoPantallaPrincipal.setStageAndSetupListeners(stage);
+				Alert alertError = new Alert(AlertType.ERROR, "El usuario o la contraseña son incorrectos.",
+						ButtonType.CLOSE);
+				alertError.setHeaderText("Error de Inicio de Sesión");
+				alertError.show();
 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} else {
+				try {
+
+					stage.getScene().setRoot(loadFXML("PantallaPrincipal"));
+					ControllerGraficoPantallaPrincipal controllerGraficoPantallaPrincipal = (ControllerGraficoPantallaPrincipal) fxmlLoader
+							.getController();
+
+					// pasar datos al controller de la nueva scene/root
+					controllerGraficoPantallaPrincipal.setConsultor(consultorDTOAutenticado);
+					controllerGraficoPantallaPrincipal.setStageAndSetupListeners(stage);
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -114,31 +159,79 @@ public class ControllerGraficoAutenticarUsuario {
 
 	public void iniciarSesionCandidato() {
 
-		CandidatoDTO candidatoDTO = new CandidatoDTO();
-		candidatoDTO.setDNI(DNI.getText());
-		candidatoDTO.setClave(usuario.getText());
-		CuestionarioDTO CuestionarioDTO = ControllerUsuarios.autenticarCandidato(candidatoDTO); // devovler
-
-		if (CuestionarioDTO == null) {
-			try {
-				stage.getScene().setRoot(loadFXML("usuario/Error-AutenticacionDeCandidato"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		if (DNI.getText().isEmpty() || clave.getText().isEmpty()
+				|| tipo.getSelectionModel().getSelectedItem() == null) {
+			if (DNI.getText().isEmpty()) {
+				if (!DNI.getStyleClass().contains("inputError")) {
+					DNI.getStyleClass().add("inputError");
+		
+				}
+			} else {
+				if (DNI.getStyleClass().contains("inputError")) {
+					DNI.getStyleClass().remove("inputError");
+				}
+			}
+			if (clave.getText().isEmpty()) {
+				if (!clave.getStyleClass().contains("inputError")) {
+					clave.getStyleClass().add("inputError");
+				}
+			} else {
+				if (clave.getStyleClass().contains("inputError")) {
+					clave.getStyleClass().remove("inputError");
+				}
+			}
+			if (tipo.getSelectionModel().getSelectedItem() == null) {
+				if (!tipo.getStyleClass().contains("inputError")) {
+					tipo.getStyleClass().add("inputError");
+				}
+			} else {
+				if (tipo.getStyleClass().contains("inputError")) {
+					tipo.getStyleClass().remove("inputError");
+				}
 			}
 		} else {
+			
+			
+			
+			if (clave.getStyleClass().contains("inputError")) {
+				clave.getStyleClass().remove("inputError");
+			}
+			if (DNI.getStyleClass().contains("inputError")) {
+				DNI.getStyleClass().remove("inputError");
+			}
+			if (tipo.getStyleClass().contains("inputError")) {
+				tipo.getStyleClass().remove("inputError");
+			}
+			
+			
+			CandidatoDTO candidatoDTO = new CandidatoDTO();
+			candidatoDTO.setTipo(tipo.getSelectionModel().getSelectedItem());
+			candidatoDTO.setDNI(DNI.getText());
+			candidatoDTO.setClave(clave.getText());
 
-			try {
-				stage.getScene().setRoot(loadFXML("usuario/CompletarCuestionario-Instrucciones"));
+			CuestionarioDTO CuestionarioDTO = ControllerUsuarios.autenticarCandidato(candidatoDTO); // devovler
+
+			if (CuestionarioDTO == null) {
+
+				Alert alertError = new Alert(AlertType.ERROR, "Los datos ingresados no son válidos o no existe un cuestionario para el candidato.",
+						ButtonType.CLOSE);
+				alertError.setHeaderText("Error de Inicio de Sesión");
+				alertError.show();
+
+			} else {
+
+				try {
+					stage.getScene().setRoot(loadFXML("usuario/CompletarCuestionario-Instrucciones"));
 // pasar datos al controller de la nueva scene/root
-				ControllerGraficoCuestionario controllerGraficoCuestionario = (ControllerGraficoCuestionario) fxmlLoader
-						.getController();
-				controllerGraficoCuestionario.setCuestionario(CuestionarioDTO);
-				controllerGraficoCuestionario.setStageAndSetupListeners(stage);
+					ControllerGraficoCuestionario controllerGraficoCuestionario = (ControllerGraficoCuestionario) fxmlLoader
+							.getController();
+					controllerGraficoCuestionario.setCuestionario(CuestionarioDTO);
+					controllerGraficoCuestionario.setStageAndSetupListeners(stage);
 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}

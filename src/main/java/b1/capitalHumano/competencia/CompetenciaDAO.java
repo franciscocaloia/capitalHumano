@@ -6,12 +6,7 @@ import java.util.List;
 import org.hibernate.MappingException;
 
 public interface CompetenciaDAO {
-	public static void insert(Competencia competencia) throws MappingException, IOException {
-	}
-	public static List<Competencia> getAllInstances() {
-		return null;
-	}
-	public static Competencia getById(Integer id) {
-		return null;
-	}
+	public void insert(Competencia competencia) throws MappingException, IOException;
+	public List<Competencia> getAllInstances();
+	public Competencia getById(Integer id);
 }

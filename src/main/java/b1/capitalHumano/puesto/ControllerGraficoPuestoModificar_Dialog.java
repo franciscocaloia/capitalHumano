@@ -1,51 +1,46 @@
 package b1.capitalHumano.puesto;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import b1.capitalHumano.competencia.Competencia;
+import b1.capitalHumano.competencia.CompetenciaDAO;
 import b1.capitalHumano.competencia.CompetenciaDAOImp;
 import b1.capitalHumano.competencia.CompetenciaDTO;
 import b1.capitalHumano.competencia.ControllerCompetencia;
 import b1.capitalHumano.empresa.ControllerEmpresa;
 import b1.capitalHumano.empresa.Empresa;
+import b1.capitalHumano.empresa.EmpresaDAO;
 import b1.capitalHumano.empresa.EmpresaDAOImp;
 import b1.capitalHumano.empresa.EmpresaDTO;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Orientation;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-public class ControllerGraficoPuestos_Dialog {
+public class ControllerGraficoPuestoModificar_Dialog {
+	PuestoDAO puestoDAO = new PuestoDAOImp();
+	EmpresaDAO empresaDAO = new EmpresaDAOImp();
+	ControllerPuestos controllerPuesto = new ControllerPuestos();
 	PuestoDTO puestoDTO;
-
+	CompetenciaDAO competenciaDAO = new CompetenciaDAOImp();
+	EmpresaDTO empresaDTO;
 	ObservableList<EmpresaDTO> empresaOL;
 	ObservableList<CompetenciaDTO> competenciaOL;
 	Set<PonderacionNecesariaDTO> caracteristicasDTO = new HashSet<PonderacionNecesariaDTO>();
+	Text textError = new Text("Se deben completar y/o veririficar todos los campos");
+	Integer idPuesto;
 	@FXML
 	DialogPane dialog;
 
@@ -60,28 +55,24 @@ public class ControllerGraficoPuestos_Dialog {
 
 	@FXML
 	TextField descripcionInput;
+
 	@FXML
 	ChoiceBox<EmpresaDTO> empresaChoice;
+
 	@FXML
 	VBox VBoxCompetencia;
-	// ScrollPane scrollPane = new ScrollPane();
 
-	Text textError = new Text("Se deben completar y/o veririficar todos los campos");
+	@FXML
+	TextField puntajeInput;
+	List<CompetenciaDTO> competenciasDTOList = ControllerCompetencia.getCompetencias();
 	Stage stage;
-	List<PuestoDTO> puestosDTO;
-	ControllerPuestos controllerPuesto = new ControllerPuestos();
+	List<EmpresaDTO> empresasDTO;
 
 	public void initialize() {
-
-		// scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		// scrollPane.fitToHeightProperty().set(true);
-
-		competenciaOL = FXCollections.observableArrayList(ControllerCompetencia.getCompetencias());
-		empresaOL = FXCollections.observableArrayList(ControllerEmpresa.getEmpresas());
+		empresasDTO = ControllerEmpresa.getEmpresas();
+		empresaOL = FXCollections.observableArrayList(empresasDTO);
+		competenciaOL = FXCollections.observableArrayList(competenciasDTOList);
 		empresaChoice.setItems(empresaOL);
-		VBoxCompetencia.getChildren().add(createCompetenciaFXML());
-
-		puestosDTO = controllerPuesto.getPuestos();
 
 	}
 
@@ -112,29 +103,53 @@ public class ControllerGraficoPuestos_Dialog {
 		}
 		borrar.setOnAction(e -> {
 			// newCompetencia.getChildren().clear();
-			
-		
-				//borrar.setDisable(false);
-				VBoxCompetencia.getChildren().remove(newCompetencia);
-			
+
+			// borrar.setDisable(false);
+			VBoxCompetencia.getChildren().remove(newCompetencia);
+
 			// caracteristicasDTO.clear();
 		});
 		return newCompetencia;
 	}
 
 	public void handleAddCompetencia() {
-		HBox hbox = createCompetenciaFXML();
-		VBoxCompetencia.getChildren().add(hbox);
-		// stage = (Stage) dialog.getScene().getWindow();
-		// stage.setHeight(stage.getHeight() + 50);
-
-		// scrollPane.setContent(VBoxCompetencia);
-		// dialog.getChildren().add(scrollPane);
-
+		VBoxCompetencia.getChildren().add(createCompetenciaFXML());
 	}
-
 	public void setPuesto(PuestoDTO puestoDTO) {
 		this.puestoDTO = puestoDTO;
+		idPuesto = puestoDTO.getIdPuesto();
+		codigoInput.setText(idPuesto.toString());
+		nombreInput.setText(puestoDTO.getNombrePuesto());
+		descripcionInput.setText(puestoDTO.getDescripcionPuesto());
+		// falta empresa y competencia
+		// empresaChoice.getSelectionModel().select(puestoDTO.getIdEmpresa());
+		for (EmpresaDTO empresa : empresasDTO) {
+			if (empresa.getIdEmpresa() == puestoDTO.getIdEmpresa()) {
+				empresaChoice.getSelectionModel().select(empresa);
+				break;
+			}
+		}
+		int cantidadCaracteristicas = puestoDTO.getCaracteristicasDTO().size();
+		if (cantidadCaracteristicas < 1) {
+			HBox aux = createCompetenciaFXML();
+			VBoxCompetencia.getChildren().add(aux); 
+		}
+		for (PonderacionNecesariaDTO ponderacionNecesariaDTO : puestoDTO.getCaracteristicasDTO()) {
+
+			HBox aux = createCompetenciaFXML();
+			TextField auxInput = (TextField) aux.getChildren().get(3);
+			ChoiceBox<CompetenciaDTO> auxChoice = (ChoiceBox<CompetenciaDTO>) aux.getChildren().get(1);
+			auxInput.setText(ponderacionNecesariaDTO.getPonderacionNecesaria().toString());
+
+			for (CompetenciaDTO competenciaDTO : competenciasDTOList) {
+				if (competenciaDTO.getIdComp() == ponderacionNecesariaDTO.getIdComp()) {
+					auxChoice.setValue(competenciaDTO);
+				}
+			}
+			// (ChoiceBox<CompetenciaDTO>)aux.getChildren().get(1).set(false);
+			VBoxCompetencia.getChildren().add(aux);
+			//caracteristicasDTO.add(ponderacionNecesariaDTO);
+		}
 	}
 
 	public boolean isNumber(String input) {
@@ -147,35 +162,9 @@ public class ControllerGraficoPuestos_Dialog {
 
 	public boolean validar() {
 		Boolean formValid = true;
+		ChoiceBox<CompetenciaDTO> choiceCompetencia;
 		// Codigo
 		String idPuesto = codigoInput.getText();
-
-		if (idPuesto.isEmpty() || !isNumber(idPuesto)) {
-
-			formValid = false;
-
-			// FALTA VERIFICAR QUE EL CODIGO ID DE PEUSTO NO EXSITE
-
-			if (!codigoInput.getStyleClass().contains("inputError")) {
-				codigoInput.getStyleClass().add("inputError");
-			}
-		} else {
-
-			for (PuestoDTO puestoDTO : puestosDTO) {
-				if (puestoDTO.getIdPuesto() == Integer.parseInt(idPuesto)) {
-
-					formValid = false;
-
-					// FALTA VERIFICAR QUE EL CODIGO ID DE PEUSTO NO EXSITE
-					codigoInput.getStyleClass().add("inputError");
-					break;
-
-				}
-			}
-			if (formValid) {
-				codigoInput.getStyleClass().remove("inputError");
-			}
-		}
 
 		// Nombre
 		String nombre = nombreInput.getText();
@@ -213,10 +202,10 @@ public class ControllerGraficoPuestos_Dialog {
 
 		boolean caracteristicaValid;
 		for (Node child : VBoxCompetencia.getChildren()) {
+
 			caracteristicaValid = true;
 			HBox caracteristica = (HBox) child;
-			ChoiceBox<CompetenciaDTO> choiceCompetencia = (ChoiceBox<CompetenciaDTO>) caracteristica.getChildren()
-					.get(1);
+			choiceCompetencia = (ChoiceBox<CompetenciaDTO>) caracteristica.getChildren().get(1);
 			CompetenciaDTO competenciaDTO = (CompetenciaDTO) choiceCompetencia.getValue();
 			TextField ponderacionInput = (TextField) caracteristica.getChildren().get(3);
 			String ponderacion = ponderacionInput.getText();
@@ -245,7 +234,7 @@ public class ControllerGraficoPuestos_Dialog {
 			if (caracteristicaValid) {
 				// caracteristicasDTO.clear();
 
-			//	System.out.println(caracteristicasDTO.size());
+				// System.out.println(caracteristicasDTO.size());
 				PonderacionNecesariaDTO newCaracteristica = new PonderacionNecesariaDTO(Integer.parseInt(ponderacion),
 						competenciaDTO.getIdComp());
 
@@ -278,6 +267,7 @@ public class ControllerGraficoPuestos_Dialog {
 			puestoDTO.setDescripcionPuesto(descripcion);
 			puestoDTO.setIdEmpresa(empresaDTO.getIdEmpresa());
 			puestoDTO.setCaracteristicasDTO(caracteristicasDTO);
+		
 		} else {
 			caracteristicasDTO.clear();
 			if (!dialogVbox.getChildren().contains(textError)) {
@@ -294,4 +284,5 @@ public class ControllerGraficoPuestos_Dialog {
 
 		return formValid;
 	}
+
 }

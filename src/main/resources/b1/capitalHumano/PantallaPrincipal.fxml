@@ -14,14 +14,17 @@
          <children>
             <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Capit@l Humano" />
             <Text layoutX="734.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consultor" />
-            <Text fx:id="textoPrincipal" layoutX="222.0" layoutY="218.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Bienvenido &lt;Usuario.nombre&gt;">
+            <Text fx:id="textoPrincipal" layoutX="222.0" layoutY="218.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Bienvenido;">
                <font>
                   <Font name="Consolas Bold" size="24.0" />
                </font>
             </Text>
             <MenuBar focusTraversable="false" layoutY="41.0" prefHeight="25.0" prefWidth="800.0">
                <menus>
-                  <Menu mnemonicParsing="false" text="Inicio" />
+                  <Menu mnemonicParsing="false" text="Inicio">
+                     <items>
+                        <MenuItem disable="true" mnemonicParsing="false" text="Volver a inicio" />
+                     </items></Menu>
                   <Menu mnemonicParsing="false" text="Candidatos">
                      <items>
                         <MenuItem mnemonicParsing="false" text="Gestionar" />
@@ -38,7 +41,7 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Evaluaciones">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="Gestionar Puesto" />
+                        <MenuItem mnemonicParsing="false" onAction="#gestionarPuestoHandleMenu" text="Gestionar Puesto" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Salidas">

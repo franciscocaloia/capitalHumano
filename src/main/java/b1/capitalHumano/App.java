@@ -20,14 +20,25 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-    	 scene = new Scene(loadFXML("usuario/AutenticacionDeUsuario--inicio"));
-    	 
-    	 //pasar stage a la clase controller
-    	 ControllerGraficoAutenticarUsuario controllerGrafico = (ControllerGraficoAutenticarUsuario)fxmlLoader.getController();
-    	 controllerGrafico.setStageAndSetupListeners(stage);
+    	
+    	//evaluar coandidato
+    	scene = new Scene(loadFXML("candidato/EvaluarCandidatos-FiltrarYSeleccionarEmpleados"));
+
+    	
+    	//gestionar
+    	//scene = new Scene(loadFXML("puesto/GestionarPuesto--inicio"));
+    	 //////////////////////////
+    //Flujo desde autenticar
+    //	 scene = new Scene(loadFXML("usuario/AutenticacionDeUsuario--inicio"));
+   // 	 ControllerGraficoAutenticarUsuario controllerGrafico = (ControllerGraficoAutenticarUsuario)fxmlLoader.getController();
+   //	 controllerGrafico.setStageAndSetupListeners(stage);
     	 //////////////////////
        // scene = new Scene(loadFXML("puesto/GestionarPuesto--Inicio"));
+    	 
+    	 
         stage.setScene(scene);
+        stage.setResizable(false);
+
         stage.show();
 
     }

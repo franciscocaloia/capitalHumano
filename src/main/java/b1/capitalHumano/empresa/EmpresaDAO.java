@@ -11,10 +11,6 @@ import b1.capitalHumano.puesto.PuestoDTO;
 public interface EmpresaDAO {
 	public static void insert(Empresa empresa) throws MappingException, IOException {
 	}
-	public static List<Empresa> getAllInstances() {
-		return null;
-	}
-	public static Empresa getById(Integer id) {
-		return null;
-	}
+	public List<Empresa> getAllInstances();
+	public Empresa getById(Integer id);
 }

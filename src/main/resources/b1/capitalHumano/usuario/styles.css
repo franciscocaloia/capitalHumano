@@ -1,0 +1,23 @@
+#codigoInput{
+	
+}
+
+#nombreInput{
+	
+}
+
+#descripcionInput{
+	
+}
+
+#empresaChoice{
+	
+}
+
+.inputError{
+	-fx-border-color:red;
+}
+
+.textError{
+	-fx-color:red;
+}

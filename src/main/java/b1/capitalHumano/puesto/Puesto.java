@@ -1,9 +1,11 @@
 package b1.capitalHumano.puesto;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import b1.capitalHumano.empresa.Empresa;
+import b1.capitalHumano.evaluacion.Evaluacion;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,17 +27,21 @@ public class Puesto {
 Integer idPuesto;
 @Column(name="nombrePuesto")
  String nombrePuesto;
-@Column(name="descripcion")
+@Column(name="descripción")
  String descripcionPuesto;
 @ManyToOne
 @JoinColumn(name = "idEmpresa")
  Empresa empresa;
 @Column(name="eliminado")
  Boolean eliminado;
-@OneToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER,orphanRemoval = true,targetEntity=PonderacionNecesaria.class)
+
+@OneToMany(cascade =  CascadeType.ALL ,fetch = FetchType.EAGER,orphanRemoval = true,targetEntity=PonderacionNecesaria.class)
 @JoinColumn(name="idPuesto")
-@MapsId
 Set<PonderacionNecesaria> caracteristicas;
+
+@OneToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER,orphanRemoval = false,targetEntity=Evaluacion.class)
+@JoinColumn(name="idPuesto", insertable = false,updatable = false)
+Set<Evaluacion> evaluaciones ;
 
 public Puesto(Integer idPuesto, String nombrePuesto, String descripcion, Empresa empresa,Set<PonderacionNecesaria> caracteristicas) {
 	this.idPuesto = idPuesto;
@@ -45,9 +51,16 @@ public Puesto(Integer idPuesto, String nombrePuesto, String descripcion, Empresa
 	this.eliminado = false;
 	this.caracteristicas = caracteristicas;
 	}
-
  public Puesto() {
 	 this.eliminado=false;
+}
+
+public Set<Evaluacion> getEvaluaciones() {
+	return evaluaciones;
+}
+
+public void setEvaluaciones(Set<Evaluacion> evaluaciones) {
+	this.evaluaciones = evaluaciones;
 }
 
 public Integer getIdPuesto() {
@@ -91,5 +104,10 @@ public Integer getIdPuesto() {
 	
 	public void setCaracteristicas(Set<PonderacionNecesaria> caracteristicas) {
 		this.caracteristicas = caracteristicas;
+	}
+
+	public void setEliminado(boolean eliminado) {
+		// TODO Auto-generated method stub
+		this.eliminado = eliminado;
 	}
 }

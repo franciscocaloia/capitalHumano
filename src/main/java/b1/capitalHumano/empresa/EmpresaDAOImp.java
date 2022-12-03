@@ -11,7 +11,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
 public class EmpresaDAOImp implements EmpresaDAO{
-	public static List<Empresa> getAllInstances() {
+	public List<Empresa> getAllInstances() {
 		Session session = new Configuration().configure().addAnnotatedClass(Empresa.class).buildSessionFactory()
 				.openSession();
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -20,12 +20,14 @@ public class EmpresaDAOImp implements EmpresaDAO{
 		criteriaQuery.select(root);
 		Query<Empresa> query = session.createQuery(criteriaQuery);
 		List<Empresa> Empresas = query.getResultList();
+		session.close();
 		return Empresas;
 	}
-	public static Empresa getById(Integer id) {
+	public Empresa getById(Integer id) {
 		Session session = new Configuration().configure().addAnnotatedClass(Empresa.class).buildSessionFactory()
 				.openSession();
 		Empresa empresa = session.get(Empresa.class, id);
+		session.close();
 		return empresa;
 	}
 }

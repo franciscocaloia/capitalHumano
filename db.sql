@@ -12,6 +12,7 @@ CREATE TABLE Candidato (
     idCandidato int NOT NULL AUTO_INCREMENT,
     clave int,
     nombre varchar(255),
+    apellido varchar(255),
     nacionalidad varchar(255),
     escolaridad varchar(255),
     dni int,

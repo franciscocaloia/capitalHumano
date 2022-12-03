@@ -15,7 +15,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
 public class CompetenciaDAOImp implements CompetenciaDAO{
-	public static List<Competencia> getAllInstances(){
+	public List<Competencia> getAllInstances(){
 		SessionFactory factory = new Configuration().configure().addAnnotatedClass(Competencia.class).buildSessionFactory();
 		Session session = factory.openSession();
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -24,12 +24,19 @@ public class CompetenciaDAOImp implements CompetenciaDAO{
 		criteriaQuery.select(root);
 		Query<Competencia> query = session.createQuery(criteriaQuery);
 		List<Competencia> competencias = query.list();
+		session.close();
 		return competencias;
 	}
-	public static Competencia getById(Integer id) {
+	public Competencia getById(Integer id) {
 		SessionFactory factory = new Configuration().configure().addAnnotatedClass(Competencia.class).buildSessionFactory();
 		Session session = factory.openSession();
 		Competencia competencia = session.get(Competencia.class,id);
+		session.close();
 		return competencia;
+	}
+	@Override
+	public void insert(Competencia competencia) throws MappingException, IOException {
+		// TODO Auto-generated method stub
+		
 	}
 }

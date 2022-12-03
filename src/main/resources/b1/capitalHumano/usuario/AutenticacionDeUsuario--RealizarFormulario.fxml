@@ -12,7 +12,7 @@
 
 <VBox prefHeight="600.0" prefWidth="800.0" scaleShape="false" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="b1.capitalHumano.usuario.ControllerGraficoAutenticarUsuario">
    <children>
-      <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <AnchorPane stylesheets="@styles.css" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
             <Text layoutX="275.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AUTENTICACIÓN DE USUARIO">
                <font>

@@ -6,13 +6,15 @@ import org.hibernate.MappingException;
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 
+import b1.capitalHumano.Cuestionario;
 import b1.capitalHumano.candidato.Candidato;
 
 public class ConsultorDAOImp implements ConsultorDAO{
 	public  Consultor getByFilter(String consultorUsuario) throws MappingException, IOException {
-		Session session = new Configuration().configure().addAnnotatedClass(Candidato.class).buildSessionFactory()
+		Session session = new Configuration().configure().addAnnotatedClass(Consultor.class).buildSessionFactory()
 				.openSession();
 		Consultor consultor = session.get(Consultor.class, consultorUsuario);
+		session.close();
 		return consultor;
 	}
 }

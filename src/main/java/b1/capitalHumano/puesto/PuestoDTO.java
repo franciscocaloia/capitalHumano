@@ -1,5 +1,6 @@
 package b1.capitalHumano.puesto;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,15 @@ public class PuestoDTO {
 		this.descripcionPuesto = descripción;
 		this.eliminado = eliminado;
 	}
+    public PuestoDTO(Puesto puesto) {
+		this.idPuesto = puesto.getIdPuesto();
+		this.idEmpresa = puesto.getEmpresa().getIdEmpresa();
+		this.nombreEmpresa = puesto.getEmpresa().getNombreEmpresa();
+		this.nombrePuesto = puesto.getNombrePuesto();
+		this.descripcionPuesto = puesto.getDescripcionPuesto();
+		this.eliminado = puesto.getEliminado();
+		// TODO Auto-generated constructor stub
+	}
     public PuestoDTO() {
 		// TODO Auto-generated constructor stub
 	}
@@ -24,7 +34,7 @@ public class PuestoDTO {
     private String nombrePuesto;
     private String descripcionPuesto;
     private boolean eliminado;
-    private Set<PonderacionNecesariaDTO> caracteristicasDTO;
+    private Set<PonderacionNecesariaDTO> caracteristicasDTO = new HashSet<PonderacionNecesariaDTO>();
     
 	   public int getIdPuesto() {
 			return idPuesto;
@@ -56,7 +66,7 @@ public class PuestoDTO {
 		public void setDescripcionPuesto(String descripción) {
 			this.descripcionPuesto = descripción;
 		}
-		public boolean isEliminado() {
+		public boolean getEliminado() {
 			return eliminado;
 		}
 		public void setEliminado(boolean eliminado) {
@@ -68,4 +78,5 @@ public class PuestoDTO {
 		public Set<PonderacionNecesariaDTO> getCaracteristicasDTO() {
 			return this.caracteristicasDTO;
 		}
+	
 }

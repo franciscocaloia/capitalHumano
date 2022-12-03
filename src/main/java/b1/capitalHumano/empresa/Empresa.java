@@ -25,7 +25,6 @@ public class Empresa {
 		this.nombreEmpresa = nombreEmpresa;
 
 	}
-
 	public Integer getIdEmpresa() {
 		return idEmpresa;
 	}
