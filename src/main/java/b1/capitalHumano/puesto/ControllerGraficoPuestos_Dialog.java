@@ -112,11 +112,10 @@ public class ControllerGraficoPuestos_Dialog {
 		}
 		borrar.setOnAction(e -> {
 			// newCompetencia.getChildren().clear();
-			
-		
-				//borrar.setDisable(false);
-				VBoxCompetencia.getChildren().remove(newCompetencia);
-			
+
+			// borrar.setDisable(false);
+			VBoxCompetencia.getChildren().remove(newCompetencia);
+
 			// caracteristicasDTO.clear();
 		});
 		return newCompetencia;
@@ -220,7 +219,8 @@ public class ControllerGraficoPuestos_Dialog {
 			CompetenciaDTO competenciaDTO = (CompetenciaDTO) choiceCompetencia.getValue();
 			TextField ponderacionInput = (TextField) caracteristica.getChildren().get(3);
 			String ponderacion = ponderacionInput.getText();
-			if (ponderacion.isEmpty() || !isNumber(ponderacion)) {
+			if (ponderacion.isEmpty() || !isNumber(ponderacion) || Integer.parseInt(ponderacion) < 0
+					|| Integer.parseInt(ponderacion) > 10) {
 				caracteristicaValid = false;
 				formValid = false;
 
@@ -245,7 +245,7 @@ public class ControllerGraficoPuestos_Dialog {
 			if (caracteristicaValid) {
 				// caracteristicasDTO.clear();
 
-			//	System.out.println(caracteristicasDTO.size());
+				// System.out.println(caracteristicasDTO.size());
 				PonderacionNecesariaDTO newCaracteristica = new PonderacionNecesariaDTO(Integer.parseInt(ponderacion),
 						competenciaDTO.getIdComp());
 

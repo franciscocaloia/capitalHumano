@@ -120,7 +120,7 @@ public class ControllerGraficoAutenticarUsuario {
 			consultorDTO.setNombre(usuario.getText());
 			consultorDTO.setContraseña(contraseña.getText());
 			ConsultorDTO consultorDTOAutenticado = ControllerUsuarios.autenticarConsultor(consultorDTO);
-
+			
 			if (consultorDTOAutenticado == null) {
 
 				Alert alertError = new Alert(AlertType.ERROR, "El usuario o la contraseña son incorrectos.",
@@ -206,7 +206,7 @@ public class ControllerGraficoAutenticarUsuario {
 			
 			CandidatoDTO candidatoDTO = new CandidatoDTO();
 			candidatoDTO.setTipo(tipo.getSelectionModel().getSelectedItem());
-			candidatoDTO.setDNI(DNI.getText());
+			candidatoDTO.setDNI(Integer.parseInt(DNI.getText()));
 			candidatoDTO.setClave(clave.getText());
 
 			CuestionarioDTO CuestionarioDTO = ControllerUsuarios.autenticarCandidato(candidatoDTO); // devovler

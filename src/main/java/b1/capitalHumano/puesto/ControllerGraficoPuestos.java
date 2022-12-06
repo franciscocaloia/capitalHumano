@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 
 import b1.capitalHumano.App;
 import b1.capitalHumano.ControllerGraficoCuestionario;
+import b1.capitalHumano.candidato.ControllerEvaluarCandidatoGrafico;
 import b1.capitalHumano.consultor.ConsultorDTO;
 import b1.capitalHumano.consultor.ControllerGraficoPantallaPrincipal;
 import b1.capitalHumano.empresa.Empresa;
@@ -62,8 +63,7 @@ public class ControllerGraficoPuestos {
 	MenuItem eliminar = new MenuItem("Eliminar");
 	List<PuestoDTO> puestosDTO;
 	private static Stage stage;
-	
-	
+
 	public void setStageAndSetupListeners(Stage stage) {
 		ControllerGraficoPuestos.stage = stage;
 	}
@@ -72,20 +72,32 @@ public class ControllerGraficoPuestos {
 		fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
 		return fxmlLoader.load();
 	}
-	
 
 	public void inicioHandleMenu() throws IOException {
 
 		stage.getScene().setRoot(loadFXML("PantallaPrincipal"));
-		ControllerGraficoPantallaPrincipal 
-		controllerGraficoPantallaPrincipal = (ControllerGraficoPantallaPrincipal) fxmlLoader
+		ControllerGraficoPantallaPrincipal controllerGraficoPantallaPrincipal = (ControllerGraficoPantallaPrincipal) fxmlLoader
 				.getController();
 		controllerGraficoPantallaPrincipal.setStageAndSetupListeners(stage);
 		controllerGraficoPantallaPrincipal.setConsultor(consultorDTO);
 	}
 
+	public void evaluarHandleMenu() throws IOException {
 
-	
+		stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-FiltrarYSeleccionarEmpleados"));
+
+		ControllerEvaluarCandidatoGrafico controllerGraficoCandidato = (ControllerEvaluarCandidatoGrafico) fxmlLoader
+				.getController();
+		//
+
+		// pasar datos al controller de la nueva scene/root
+
+		controllerGraficoCandidato.setStageAndSetupListeners(stage);
+		controllerGraficoCandidato.setConsultorDTO(consultorDTO);
+		// System.out.println("aaaaaaaaa");
+
+	}
+
 	public void actualizarTabla() {
 
 		ControllerPuestos controllerPuesto = new ControllerPuestos();
@@ -99,7 +111,6 @@ public class ControllerGraficoPuestos {
 		puestosOL.removeIf(estaEliminado);
 
 		puestoTable.setItems(puestosOL);
-
 	}
 
 	public void buscarHandle() {
@@ -115,6 +126,7 @@ public class ControllerGraficoPuestos {
 		puestoTable.setItems(puestosOL);
 
 	}
+
 	public void initialize() {
 		contextMenu.getItems().addAll(modificar, eliminar);
 		actualizarTabla();
@@ -187,7 +199,6 @@ public class ControllerGraficoPuestos {
 
 	}
 
-	
 	public void handleAdd() {
 		try {
 			PuestoDTO newPuesto = new PuestoDTO();
@@ -223,6 +234,6 @@ public class ControllerGraficoPuestos {
 	public void setConsultorDTO(ConsultorDTO consultorDTO) {
 		// TODO Auto-generated method stub
 		this.consultorDTO = consultorDTO;
-		
+
 	}
 }

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" scaleShape="false" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="b1.capitalHumano.candidato.ControllerEvaluar_Final_CandidatoGrafico">
+	<children>
+		<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+			<children>
+				<Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Capit@l Humano" />
+				<Text layoutX="734.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consultor" />
+				<Text layoutX="14.0" layoutY="118.0" opacity="0.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Evaluar Candidatos">
+					<font>
+						<Font name="Consolas Bold" size="24.0" />
+					</font>
+				</Text>
+				<MenuBar focusTraversable="false" layoutY="41.0" prefHeight="25.0" prefWidth="800.0">
+					<menus>
+						<Menu mnemonicParsing="false" text="Inicio">
+							<items>
+								<MenuItem mnemonicParsing="false" onAction="#inicioHandleMenu" text="Volver a inicio" />
+
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Candidatos">
+							<items>
+								<MenuItem mnemonicParsing="false" text="Gestionar" />
+								<MenuItem mnemonicParsing="false" text="Importar" />
+								<MenuItem disable="true" mnemonicParsing="false" text="Evaluar" />
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Datos Basicos">
+							<items>
+								<MenuItem mnemonicParsing="false" text="Gestionar Competencias" />
+								<MenuItem mnemonicParsing="false" text="Gestionar Factores" />
+								<MenuItem mnemonicParsing="false" text="Gestionar Preguntas" />
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Evaluaciones">
+							<items>
+								<MenuItem mnemonicParsing="false" onAction="#gestionarPuestoHandleMenu" text="Gestionar Puesto" />
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Salidas">
+							<items>
+								<MenuItem mnemonicParsing="false" text="Exportar Resultados" />
+								<MenuItem mnemonicParsing="false" text="Emitir Reporte Comparativo" />
+								<MenuItem mnemonicParsing="false" text="Emitir Orden de Merito" />
+							</items>
+						</Menu>
+					</menus>
+				</MenuBar>
+				<TableView fx:id="candidatoTable" layoutX="14.0" layoutY="141.0" prefHeight="380.0" prefWidth="771.0">
+					<columns>
+						<TableColumn fx:id="apellidoColumn" prefWidth="166.0" text="Apellido" />
+						<TableColumn fx:id="nombreColumn" prefWidth="151.0" text="Nombre" />
+						<TableColumn fx:id="tipoDocColumn" prefWidth="148.0" text="Tipo de Documento" />
+						<TableColumn fx:id="numDocColumn" prefWidth="126.0" text="N° Documento" />
+						<TableColumn fx:id="claveColumn" prefWidth="179.0" text="Clave de Ingreso" />
+					</columns>
+				</TableView>
+				<Button defaultButton="true" layoutX="703.0" layoutY="547.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0" style="-fx-background-color: none; -fx-border-width: 2px; -fx-border-color: black;" text="Finalizar">
+					<font>
+						<Font name="Consolas" size="11.0" />
+					</font>
+					<cursor>
+						<Cursor fx:constant="HAND" />
+					</cursor>
+				</Button>
+				<Button defaultButton="true" layoutX="17.0" layoutY="547.0" mnemonicParsing="false" onAction="#cancelarHandle" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: none; -fx-border-width: 2px; -fx-border-color: black;" text="Cancelar">
+					<font>
+						<Font name="Consolas" size="11.0" />
+					</font>
+					<cursor>
+						<Cursor fx:constant="HAND" />
+					</cursor>
+				</Button>
+			</children>
+		</AnchorPane>
+	</children>
+</VBox>

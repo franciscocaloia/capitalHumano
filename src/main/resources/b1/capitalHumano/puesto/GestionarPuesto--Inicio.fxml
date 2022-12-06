@@ -35,7 +35,7 @@
                      <items>
                         <MenuItem mnemonicParsing="false" text="Gestionar" />
                         <MenuItem mnemonicParsing="false" text="Importar" />
-                        <MenuItem mnemonicParsing="false" text="Evaluar" />
+                        <MenuItem onAction="#evaluarHandleMenu"  mnemonicParsing="false" text="Evaluar" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Datos Basicos">

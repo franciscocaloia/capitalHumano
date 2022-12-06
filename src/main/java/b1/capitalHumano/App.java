@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import b1.capitalHumano.candidato.ControllerEvaluarCandidatoGrafico;
 import b1.capitalHumano.puesto.PuestoDAOImp;
 import b1.capitalHumano.usuario.ControllerGraficoAutenticarUsuario;
 
@@ -22,18 +23,19 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
     	
     	//evaluar coandidato
-    	scene = new Scene(loadFXML("candidato/EvaluarCandidatos-FiltrarYSeleccionarEmpleados"));
-
+    //	scene = new Scene(loadFXML("candidato/EvaluarCandidatos-FiltrarYSeleccionarEmpleados"));
+    //	 ControllerEvaluarCandidatoGrafico controllerEvaluarCandidatoGrafico = (ControllerEvaluarCandidatoGrafico)fxmlLoader.getController();
+    //	 controllerEvaluarCandidatoGrafico.setStageAndSetupListeners(stage);
     	
     	//gestionar
-    	//scene = new Scene(loadFXML("puesto/GestionarPuesto--inicio"));
+    //	scene = new Scene(loadFXML("puesto/GestionarPuesto--inicio"));
     	 //////////////////////////
     //Flujo desde autenticar
-    //	 scene = new Scene(loadFXML("usuario/AutenticacionDeUsuario--inicio"));
-   // 	 ControllerGraficoAutenticarUsuario controllerGrafico = (ControllerGraficoAutenticarUsuario)fxmlLoader.getController();
-   //	 controllerGrafico.setStageAndSetupListeners(stage);
+   	 scene = new Scene(loadFXML("usuario/AutenticacionDeUsuario--inicio"));
+  	 ControllerGraficoAutenticarUsuario controllerGrafico = (ControllerGraficoAutenticarUsuario)fxmlLoader.getController();
+   	 controllerGrafico.setStageAndSetupListeners(stage);
     	 //////////////////////
-       // scene = new Scene(loadFXML("puesto/GestionarPuesto--Inicio"));
+      
     	 
     	 
         stage.setScene(scene);

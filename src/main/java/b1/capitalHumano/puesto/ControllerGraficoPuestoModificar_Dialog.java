@@ -103,7 +103,6 @@ public class ControllerGraficoPuestoModificar_Dialog {
 		}
 		borrar.setOnAction(e -> {
 			// newCompetencia.getChildren().clear();
-
 			// borrar.setDisable(false);
 			VBoxCompetencia.getChildren().remove(newCompetencia);
 
@@ -209,7 +208,7 @@ public class ControllerGraficoPuestoModificar_Dialog {
 			CompetenciaDTO competenciaDTO = (CompetenciaDTO) choiceCompetencia.getValue();
 			TextField ponderacionInput = (TextField) caracteristica.getChildren().get(3);
 			String ponderacion = ponderacionInput.getText();
-			if (ponderacion.isEmpty() || !isNumber(ponderacion)) {
+			if (ponderacion.isEmpty() || !isNumber(ponderacion) || Integer.parseInt(ponderacion)  <0 ||  Integer.parseInt(ponderacion)  > 10) {
 				caracteristicaValid = false;
 				formValid = false;
 

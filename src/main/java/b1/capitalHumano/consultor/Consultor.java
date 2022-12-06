@@ -5,30 +5,43 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity(name="Consultor")
-@Table(name="consultor")
+@Entity(name = "Consultor")
+@Table(name = "consultor")
 public class Consultor {
 
-
 	@Id
-	@Column(name="usuario")
+	@Column(name = "idConsultor")
+	private Integer idConsultor;
+	@Column(name = "usuario")
 	private String usuario;
-	@Column(name="contraseña")
+	@Column(name = "contraseña")
 	private String contraseña;
+
 	public String getContraseña() {
 		// TODO Auto-generated method stub
 		return contraseña;
 	}
+
 	public String getNombre() {
 		// TODO Auto-generated method stub
 		return usuario;
 	}
-	public void  setContraseña(String contraseña) {
+
+	public void setContraseña(String contraseña) {
 		// TODO Auto-generated method stub
-		this.contraseña= contraseña;
+		this.contraseña = contraseña;
 	}
+
 	public void setNombre(String usuario) {
 		// TODO Auto-generated method stub
-	this.usuario = usuario;
+		this.usuario = usuario;
+	}
+
+	public Integer getIdConsultor() {
+		return idConsultor;
+	}
+
+	public void setIdConsultor(Integer idConsultor) {
+		this.idConsultor = idConsultor;
 	}
 }

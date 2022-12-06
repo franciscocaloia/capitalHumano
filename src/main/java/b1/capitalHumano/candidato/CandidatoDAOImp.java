@@ -9,30 +9,69 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
 import b1.capitalHumano.Cuestionario;
+import b1.capitalHumano.competencia.Competencia;
+import b1.capitalHumano.consultor.Consultor;
 import b1.capitalHumano.empresa.Empresa;
+import b1.capitalHumano.evaluacion.Evaluacion;
+import b1.capitalHumano.puesto.PonderacionNecesaria;
+import b1.capitalHumano.puesto.Puesto;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 public class CandidatoDAOImp implements CandidatoDAO {
+	
+	public List<Candidato> buscarCandidatos(Integer codigoInput, String nombreInput, String apellidoInput) {
+		Session session = new Configuration().configure().addAnnotatedClass(Evaluacion.class).addAnnotatedClass(Cuestionario.class)
+				.addAnnotatedClass(Puesto.class).addAnnotatedClass(PonderacionNecesaria.class)
+				.addAnnotatedClass(Competencia.class).addAnnotatedClass(Empresa.class)
+				.addAnnotatedClass(Candidato.class).buildSessionFactory().openSession();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<Candidato> criteriaQuery = criteriaBuilder.createQuery(Candidato.class);
 
-	public Candidato getByFilter(String DNI, String tipoDNIInput)  {
-		// conectar y traer de la DB -- PROBAR
+		Root<Candidato> root = criteriaQuery.from(Candidato.class);
 
-		Session session = new Configuration().configure().addAnnotatedClass(Candidato.class)
-				.addAnnotatedClass(TipoDNI.class).addAnnotatedClass(Cuestionario.class).buildSessionFactory()
-				.openSession();
+		Predicate codigoQ = criteriaBuilder.equal(root.get("idCandidato"), codigoInput);
 
-		Candidato candidato = session.get(Candidato.class, DNI);
+		Predicate nombreQ = criteriaBuilder.like(root.get("nombre"), "%" + nombreInput + "%");
+		Predicate apellidoQ = criteriaBuilder.like(root.get("apellido"), "%" + apellidoInput + "%");
 
+		// Predicate empresaQ = criteriaBuilder.like(root.join("idEmpresa"), empresa);
+
+		criteriaQuery.select(root).where(criteriaBuilder.and(apellidoQ, codigoQ, nombreQ));
+
+		Query<Candidato> query = session.createQuery(criteriaQuery);
+
+		List<Candidato> candidatos = query.getResultList();
 		session.close();
+		return candidatos;
 
-		for (TipoDNI tipoDNI : candidato.getTipoDNI()) {
-			if (tipoDNI.getTipoDNI() == tipoDNIInput) {
-				return candidato;
-			}
-		}
-		return null;
+	}
+
+	public List<Candidato> buscarCandidatos(String nombreInput, String apellidoInput) {
+		Session session = new Configuration().configure().addAnnotatedClass(Evaluacion.class).addAnnotatedClass(Cuestionario.class)
+				.addAnnotatedClass(Puesto.class).addAnnotatedClass(PonderacionNecesaria.class)
+				.addAnnotatedClass(Competencia.class).addAnnotatedClass(Empresa.class)
+				.addAnnotatedClass(Candidato.class).buildSessionFactory().openSession();
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<Candidato> criteriaQuery = criteriaBuilder.createQuery(Candidato.class);
+
+		Root<Candidato> root = criteriaQuery.from(Candidato.class);
+
+		Predicate nombreQ = criteriaBuilder.like(root.get("nombre"), "%" + nombreInput + "%");
+		Predicate apellidoQ = criteriaBuilder.like(root.get("apellido"), "%" + apellidoInput + "%");
+
+		// Predicate empresaQ = criteriaBuilder.like(root.join("idEmpresa"), empresa);
+
+		criteriaQuery.select(root).where(criteriaBuilder.and(apellidoQ, nombreQ));
+
+		Query<Candidato> query = session.createQuery(criteriaQuery);
+
+		List<Candidato> candidatos = query.getResultList();
+		session.close();
+		return candidatos;
 
 	}
 
@@ -40,8 +79,8 @@ public class CandidatoDAOImp implements CandidatoDAO {
 		// conectar y traer de la DB -- PROBAR
 
 		Session session = new Configuration().configure().addAnnotatedClass(Candidato.class)
-				.addAnnotatedClass(TipoDNI.class).addAnnotatedClass(Cuestionario.class).buildSessionFactory()
-				.openSession();
+				.addAnnotatedClass(TipoDNI.class).addAnnotatedClass(Cuestionario.class)
+				.addAnnotatedClass(Consultor.class).buildSessionFactory().openSession();
 
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 		CriteriaQuery<Candidato> criteriaQuery = criteriaBuilder.createQuery(Candidato.class);

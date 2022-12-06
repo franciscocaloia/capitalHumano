@@ -15,35 +15,41 @@ import jakarta.persistence.Table;
 @Table(name = "puesto_competencia")
 
 public class PonderacionNecesaria {
-	@Column(name = "ponderaciónNecesaria")
-	Integer ponderacionNecesaria;
+
+
 
 	
-
+	
 	@Id
-	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, targetEntity = Competencia.class)
+	@ManyToOne(  fetch = FetchType.EAGER, targetEntity = Competencia.class)
 	@JoinColumn(name = "idComp")
 	Competencia competencia;
 
 	// no se si es bidireccional
 	@Id
-	@ManyToOne(cascade = { CascadeType.ALL },  fetch = FetchType.EAGER, targetEntity = Puesto.class)
-	@JoinColumn(name = "idPuesto")
+	@ManyToOne( fetch = FetchType.EAGER, targetEntity = Puesto.class)
+	@JoinColumn(name = "idPuesto" )
 	Puesto puesto;
 
+	@Column(name = "ponderaciónNecesaria", nullable = true)
+	Integer ponderacionNecesaria;
+	
 	public PonderacionNecesaria() {
 
 	}
 
 	public PonderacionNecesaria(Puesto puesto, Integer ponderacion, Competencia competencia) {
-		this.puesto=puesto;
-		this.ponderacionNecesaria = ponderacion;
 		this.competencia = competencia;
+		this.puesto = puesto;
+		this.ponderacionNecesaria = ponderacion;
 
 	}
 
 	public Puesto getPuesto() {
 		return puesto;
+	}
+	public void setPuesto(Puesto puesto) {
+		this.puesto = puesto;
 	}
 
 	public Integer getPonderacionNecesaria() {
@@ -78,6 +84,9 @@ public class PonderacionNecesaria {
 
 	@Override
 	public int hashCode() {
+	//	//ELIMINAR
+	//System.out.println(competencia + " " +puesto + " " + ponderacionNecesaria);
+		//
 		return 31 * competencia.getIdComp().hashCode() + ponderacionNecesaria.hashCode();
 	}
 }

@@ -27,12 +27,15 @@
             </Text>
             <MenuBar focusTraversable="false" layoutY="41.0" prefHeight="25.0" prefWidth="800.0">
                <menus>
-                  <Menu mnemonicParsing="false" text="Inicio" />
+                  <Menu mnemonicParsing="false" text="Inicio">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#inicioHandleMenu" text="Volver a inicio" />
+                     </items></Menu>
                   <Menu mnemonicParsing="false" text="Candidatos">
                      <items>
                         <MenuItem mnemonicParsing="false" text="Gestionar" />
                         <MenuItem mnemonicParsing="false" text="Importar" />
-                        <MenuItem mnemonicParsing="false" text="Evaluar" />
+                        <MenuItem disable="true" mnemonicParsing="false" text="Evaluar" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Datos Basicos">
@@ -44,7 +47,7 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Evaluaciones">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="Gestionar Puesto" />
+                        <MenuItem mnemonicParsing="false" onAction="#gestionarPuestoHandleMenu" text="Gestionar Puesto" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Salidas">
@@ -56,20 +59,20 @@
                   </Menu>
                </menus>
             </MenuBar>
-            <TextField layoutX="17.0" layoutY="147.0" prefHeight="21.0" prefWidth="107.0" />
-            <TextField layoutX="147.0" layoutY="147.0" prefHeight="25.0" prefWidth="107.0" />
-            <TextField layoutX="279.0" layoutY="147.0" prefHeight="25.0" prefWidth="107.0" />
+            <TextField fx:id="apellidoInput" layoutX="17.0" layoutY="147.0" prefHeight="25.0" prefWidth="90.0" />
+            <TextField fx:id="nombreInput" layoutX="117.0" layoutY="147.0" prefHeight="25.0" prefWidth="90.0" />
+            <TextField fx:id="codigoInput" layoutX="217.0" layoutY="147.0" prefHeight="25.0" prefWidth="91.0" />
             <Label layoutX="17.0" layoutY="128.0" text="Apellido" />
-            <Label layoutX="147.0" layoutY="128.0" text="Nombre" />
-            <Label layoutX="279.0" layoutY="128.0" text="N° Candidato" />
+            <Label layoutX="117.0" layoutY="128.0" text="Nombre" />
+            <Label layoutX="217.0" layoutY="128.0" text="N° Candidato" />
             <TableView fx:id="candidatoTable" layoutX="14.0" layoutY="185.0" prefHeight="336.0" prefWidth="372.0">
                <columns>
-                  <TableColumn fx:id="numeroCandidatoColumn" prefWidth="112.0" text="N° Candidato" />
                   <TableColumn fx:id="apellidoCandidatoColumn" prefWidth="134.0" text="Apellido" />
                   <TableColumn fx:id="nombreCandidatoColumn" prefWidth="125.0" text="Nombre" />
+                  <TableColumn fx:id="numeroCandidatoColumn" prefWidth="112.0" text="N° Candidato" />
                </columns>
             </TableView>
-            <Button layoutX="17.0" layoutY="534.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="Agregar">
+            <Button layoutX="17.0" layoutY="534.0" mnemonicParsing="false" onAction="#agregarCandidatoHandle" prefHeight="25.0" prefWidth="72.0" text="Agregar">
                <font>
                   <Font name="Consolas" size="11.0" />
                </font>
@@ -82,7 +85,7 @@
                   <Font size="17.0" />
                </font>
             </Label>
-            <Button layoutX="414.0" layoutY="534.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="Quitar">
+            <Button layoutX="414.0" layoutY="534.0" mnemonicParsing="false" onAction="#quitarCandidatosHandle" prefHeight="25.0" prefWidth="72.0" text="Quitar">
                <font>
                   <Font name="Consolas" size="11.0" />
                </font>
@@ -90,7 +93,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button defaultButton="true" layoutX="696.0" layoutY="563.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Siguiente">
+            <Button defaultButton="true" layoutX="696.0" layoutY="563.0" mnemonicParsing="false" onAction="#siguienteHandle" prefHeight="25.0" prefWidth="90.0" text="Siguiente">
                <font>
                   <Font name="Consolas" size="11.0" />
                </font>
@@ -100,11 +103,12 @@
             </Button>
             <TableView fx:id="candidatoTableEv" layoutX="414.0" layoutY="185.0" prefHeight="336.0" prefWidth="372.0">
                <columns>
+                  <TableColumn fx:id="apellidoCandidatoColumnEv" prefWidth="134.0" text="Apellido" />
+                  <TableColumn fx:id="nombreCandidatoColumnEv" prefWidth="125.0" text="Nombre" />
                   <TableColumn fx:id="numeroCandidatoColumnEv" prefWidth="112.0" text="N° Candidato" />
-                  <TableColumn fx:id="nombreCandidatoColumnEv" prefWidth="134.0" text="Apellido" />
-                  <TableColumn fx:id="apellidoCandidatoColumnEv" prefWidth="125.0" text="Nombre" />
                </columns>
             </TableView>
+            <Button layoutX="322.0" layoutY="147.0" mnemonicParsing="false" onAction="#buscarCandidatosHandle" prefHeight="25.0" prefWidth="65.0" text="Buscar" />
          </children>
       </AnchorPane>
    </children>

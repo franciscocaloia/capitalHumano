@@ -29,7 +29,7 @@
                      <items>
                         <MenuItem mnemonicParsing="false" text="Gestionar" />
                         <MenuItem mnemonicParsing="false" text="Importar" />
-                        <MenuItem mnemonicParsing="false" text="Evaluar" />
+                        <MenuItem mnemonicParsing="false" onAction="#evaluarHandleMenu" text="Evaluar" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Datos Basicos">

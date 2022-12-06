@@ -14,19 +14,25 @@ import jakarta.persistence.Table;
 @Entity(name = "Factor")
 @Table(name = "factor")
 public class Factor {
+	
+	@Id
+	@Column(name = "idFactor")
+	Integer idFactor;
+	
 
-
+//	@Id
+//	@OneToMany
+//	@JoinColumn(name = "idFactor")
+//	Set<Pregunta> preguntas;
+	
+	@Column(name="idComp")
+	Integer idComp;
 	@Column(name = "nombreFactor")
 	String nombreFactor;
 	@Column(name = "descripción")
 	String descripcion;
 	@Column(name = "eliminado")
 	Boolean eliminado;
-	@Column(name = "idComp")
-	Integer competencia;
 
-	@Id
-	@OneToMany
-	@JoinColumn(name = "idFactor")
-	Set<Pregunta> preguntas;
+
 }

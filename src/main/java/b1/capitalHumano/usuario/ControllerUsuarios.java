@@ -16,48 +16,47 @@ import b1.capitalHumano.consultor.ConsultorDAOImp;
 import b1.capitalHumano.consultor.ConsultorDTO;
 
 public class ControllerUsuarios {
-public static ConsultorDTO autenticarConsultor( ConsultorDTO consultorDTO) {
-	Consultor consultor = null;
-	
+	public static ConsultorDTO autenticarConsultor(ConsultorDTO consultorDTO) {
+		Consultor consultor = null;
 
-	ConsultorDAO consultorDaoImp =  new ConsultorDAOImp();
+		ConsultorDAO consultorDaoImp = new ConsultorDAOImp();
 
-  try {
+		try {
+			//System.out.println(consultorDTO.getNombre());
 
-		consultor = consultorDaoImp.getByFilter(consultorDTO.getNombre());
-		//System.out.println(consultor.getNombre());
-	} catch (MappingException | IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} 
+			consultor = consultorDaoImp.getByFilter(consultorDTO.getNombre());
 
-	if(consultor == null || !consultor.getContraseña().equals(consultorDTO.getContraseña())) {
+		} catch (MappingException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		return null;
+		if (consultor == null || !consultor.getContraseña().equals(consultorDTO.getContraseña())) {
+
+			return null;
+		}
+		return new ConsultorDTO(consultor);
 	}
-	return new ConsultorDTO(consultor);
-}
-public static CuestionarioDTO autenticarCandidato( CandidatoDTO candidatoDTO) {
-	Candidato candidato = null;
-	CandidatoDAO candidatoDAOImp =  new CandidatoDAOImp();
 
-	//AGREGAR EN DIAGRAMA DE SECUENCIA GETTIPO
+	public static CuestionarioDTO autenticarCandidato(CandidatoDTO candidatoDTO) {
+		Candidato candidato = null;
+		CandidatoDAO candidatoDAOImp = new CandidatoDAOImp();
 
-	candidato = candidatoDAOImp.getByFilter(candidatoDTO.getDNI(),candidatoDTO.getTipo());
+		// AGREGAR EN DIAGRAMA DE SECUENCIA GETTIPO
 
+		candidato = candidatoDAOImp.getByFilter(candidatoDTO.getDNI(), candidatoDTO.getTipo());
 
+		if (candidato == null || !candidato.getClave().equals(candidatoDTO.getClave())) {
+			return null;
+		}
 
-if(candidato == null ||!candidato.getClave().equals(candidatoDTO.getClave())) {
-	return null;
-}
+		Cuestionario cuestionario = candidato.getActivo();
 
-Cuestionario cuestionario = candidato.getActivo();
+		if (cuestionario == null) {
+			return null;
+		}
+		return new CuestionarioDTO(cuestionario);
 
-if (cuestionario == null) {
-	return null;
-}
-return new CuestionarioDTO(cuestionario);
-
-}
+	}
 
 }

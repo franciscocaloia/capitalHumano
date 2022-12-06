@@ -3,7 +3,7 @@ CREATE TABLE TipoDNI (
     idCandidato int
 );
 CREATE TABLE Consultor (
-    idConsultor int NOT NULL AUTO_INCREMENT,
+    idConsultor int,
     contraseña int,
     usuario varchar(255)
 );
@@ -11,6 +11,7 @@ CREATE TABLE Candidato (
     idConsultor int,
     idCandidato int NOT NULL AUTO_INCREMENT,
     clave int,
+    tipo varchar(255),
     nombre varchar(255),
     apellido varchar(255),
     nacionalidad varchar(255),
@@ -30,7 +31,7 @@ CREATE TABLE Cuestionario (
     clave int,
     fechaInicio date,
     ultimoIngreso date,
-    nroIntresos int,
+    nroIngresos int,
     eliminado boolean
 );
 CREATE TABLE Bloque (
