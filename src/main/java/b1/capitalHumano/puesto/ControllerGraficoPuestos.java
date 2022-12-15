@@ -8,10 +8,10 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import b1.capitalHumano.App;
-import b1.capitalHumano.ControllerGraficoCuestionario;
-import b1.capitalHumano.candidato.ControllerEvaluarCandidatoGrafico;
+import b1.capitalHumano.candidato.ControllerGraficoEvaluarCandidatos;
 import b1.capitalHumano.consultor.ConsultorDTO;
 import b1.capitalHumano.consultor.ControllerGraficoPantallaPrincipal;
+import b1.capitalHumano.cuestionario.ControllerGraficoCuestionario;
 import b1.capitalHumano.empresa.Empresa;
 import b1.capitalHumano.usuario.ControllerGraficoAutenticarUsuario;
 import javafx.collections.FXCollections;
@@ -52,11 +52,13 @@ public class ControllerGraficoPuestos {
 	TableColumn<PuestoDTO, String> empresaColumn;
 	@FXML
 	TableColumn<PuestoDTO, String> descripcionColumn;
+	
 	ObservableList<PuestoDTO> puestosOL;
 	ObservableList<Empresa> empresaObs;
+	
 	private static FXMLLoader fxmlLoader;
 	ContextMenu contextMenu = new ContextMenu();
-	ControllerPuestos controllerPuesto = new ControllerPuestos();
+	ControllerPuestos controllerPuesto = ControllerPuestos.getInstance();
 	ConsultorDTO consultorDTO;
 	// Creating the menu Items for the context menu
 	MenuItem modificar = new MenuItem("Modificar");
@@ -84,9 +86,9 @@ public class ControllerGraficoPuestos {
 
 	public void evaluarHandleMenu() throws IOException {
 
-		stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-FiltrarYSeleccionarEmpleados"));
+		stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos"));
 
-		ControllerEvaluarCandidatoGrafico controllerGraficoCandidato = (ControllerEvaluarCandidatoGrafico) fxmlLoader
+		ControllerGraficoEvaluarCandidatos controllerGraficoCandidato = (ControllerGraficoEvaluarCandidatos) fxmlLoader
 				.getController();
 		//
 
@@ -128,9 +130,10 @@ public class ControllerGraficoPuestos {
 	}
 
 	public void initialize() {
+		modificar.setDisable(true);
 		contextMenu.getItems().addAll(modificar, eliminar);
 		actualizarTabla();
-		idColumn.setCellValueFactory(new PropertyValueFactory<PuestoDTO, Integer>("idPuesto"));
+		idColumn.setCellValueFactory(new PropertyValueFactory<PuestoDTO, Integer>("codigoPuesto"));
 		nombreColumn.setCellValueFactory(new PropertyValueFactory<PuestoDTO, String>("nombrePuesto"));
 		empresaColumn.setCellValueFactory(new PropertyValueFactory<PuestoDTO, String>("nombreEmpresa"));
 		descripcionColumn.setCellValueFactory(new PropertyValueFactory<PuestoDTO, String>("descripcionPuesto"));
@@ -209,7 +212,7 @@ public class ControllerGraficoPuestos {
 
 			Dialog<ButtonType> dialog = new Dialog<>();
 			dialog.setDialogPane(puestoDialogPane);
-			ControllerGraficoPuestos_Dialog controllerDialog = fxmlLoader.getController();
+			ControllerGraficoPuestos_DarDeAlta controllerDialog = fxmlLoader.getController();
 
 			controllerDialog.setPuesto(newPuesto);
 

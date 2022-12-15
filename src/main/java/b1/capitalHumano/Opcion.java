@@ -13,15 +13,45 @@ import jakarta.persistence.Table;
 public class Opcion {
 
 	@Id
-	@OneToMany
-	@JoinColumn(name = "idOpcionRt")
-	Set<Pregunta_Opcion> opciones;
-
-	
-
-	@Column(name = "descripción")
+	@Column(name="idOpcion")
+	Integer idOpcion;
+	@Column(name="orden")
+	Integer orden;
+	@Column(name = "nombre")
+	String nombre;
+	@Column(name = "descripcion")
 	String descripcion;
 	@Column(name = "eliminado")
 	Boolean eliminado;
-
+	
+	public Integer getIdOpcion() {
+		return idOpcion;
+	}
+	public void setIdOpcion(Integer idOpcion) {
+		this.idOpcion = idOpcion;
+	}
+	public Integer getOrden() {
+		return orden;
+	}
+	public void setOrden(Integer orden) {
+		this.orden = orden;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	public Boolean getEliminado() {
+		return eliminado;
+	}
+	public void setEliminado(Boolean eliminado) {
+		this.eliminado = eliminado;
+	}
 }

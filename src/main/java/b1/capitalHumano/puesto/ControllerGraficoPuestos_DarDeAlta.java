@@ -40,9 +40,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-public class ControllerGraficoPuestos_Dialog {
+public class ControllerGraficoPuestos_DarDeAlta {
 	PuestoDTO puestoDTO;
-
+	ControllerEmpresa controllerEmpresa= ControllerEmpresa.getInstance();
 	ObservableList<EmpresaDTO> empresaOL;
 	ObservableList<CompetenciaDTO> competenciaOL;
 	Set<PonderacionNecesariaDTO> caracteristicasDTO = new HashSet<PonderacionNecesariaDTO>();
@@ -69,7 +69,7 @@ public class ControllerGraficoPuestos_Dialog {
 	Text textError = new Text("Se deben completar y/o veririficar todos los campos");
 	Stage stage;
 	List<PuestoDTO> puestosDTO;
-	ControllerPuestos controllerPuesto = new ControllerPuestos();
+	ControllerPuestos controllerPuesto = ControllerPuestos.getInstance();
 
 	public void initialize() {
 
@@ -77,7 +77,9 @@ public class ControllerGraficoPuestos_Dialog {
 		// scrollPane.fitToHeightProperty().set(true);
 
 		competenciaOL = FXCollections.observableArrayList(ControllerCompetencia.getCompetencias());
-		empresaOL = FXCollections.observableArrayList(ControllerEmpresa.getEmpresas());
+		empresaOL = FXCollections.observableArrayList(controllerEmpresa.getEmpresas());
+		competenciaOL.sort((o1, o2) -> o1.getNombreComp().compareTo(o2.getNombreComp()));
+		empresaOL.sort((o1, o2) -> o1.getNombreEmpresa().compareTo(o2.getNombreEmpresa()));
 		empresaChoice.setItems(empresaOL);
 		VBoxCompetencia.getChildren().add(createCompetenciaFXML());
 
@@ -126,10 +128,8 @@ public class ControllerGraficoPuestos_Dialog {
 		VBoxCompetencia.getChildren().add(hbox);
 		// stage = (Stage) dialog.getScene().getWindow();
 		// stage.setHeight(stage.getHeight() + 50);
-
 		// scrollPane.setContent(VBoxCompetencia);
 		// dialog.getChildren().add(scrollPane);
-
 	}
 
 	public void setPuesto(PuestoDTO puestoDTO) {
@@ -147,7 +147,17 @@ public class ControllerGraficoPuestos_Dialog {
 	public boolean validar() {
 		Boolean formValid = true;
 		// Codigo
+		textError.setText("Se deben completar y/o veririficar todos los campos");
 		String idPuesto = codigoInput.getText();
+
+		String nombre = nombreInput.getText();
+		if (nombre.isEmpty()) {
+			if (!nombreInput.getStyleClass().contains("inputError")) {
+				nombreInput.getStyleClass().add("inputError");
+			}
+		} else {
+			nombreInput.getStyleClass().remove("inputError");
+		}
 
 		if (idPuesto.isEmpty() || !isNumber(idPuesto)) {
 
@@ -161,14 +171,26 @@ public class ControllerGraficoPuestos_Dialog {
 		} else {
 
 			for (PuestoDTO puestoDTO : puestosDTO) {
-				if (puestoDTO.getIdPuesto() == Integer.parseInt(idPuesto)) {
 
-					formValid = false;
+				// ARREGLAR EL ESTILO
+				if (puestoDTO.getIdEmpresa() == empresaChoice.getValue().getIdEmpresa()) {
+					if (nombre.isEmpty()
+							|| puestoDTO.getNombrePuesto().toLowerCase().equals(nombreInput.getText().toLowerCase())) {
+						formValid = false;
+						textError.setText("Se debe veririficar el nombre del puesto o la empresa seleccionada");
+						if (!nombreInput.getStyleClass().contains("inputError")) {
+							nombreInput.getStyleClass().add("inputError");
+						}
 
-					// FALTA VERIFICAR QUE EL CODIGO ID DE PEUSTO NO EXSITE
-					codigoInput.getStyleClass().add("inputError");
-					break;
+					}
+					if (puestoDTO.getCodigoPuesto() == Integer.parseInt(idPuesto)) {
+						formValid = false;
+						textError.setText("Se debe veririficar el codigo o la empresa seleccionada.");
+						if (!codigoInput.getStyleClass().contains("inputError")) {
+							codigoInput.getStyleClass().add("inputError");
+						}
 
+					}
 				}
 			}
 			if (formValid) {
@@ -177,15 +199,6 @@ public class ControllerGraficoPuestos_Dialog {
 		}
 
 		// Nombre
-		String nombre = nombreInput.getText();
-		if (nombre.isEmpty()) {
-			formValid = false;
-			if (!nombreInput.getStyleClass().contains("inputError")) {
-				nombreInput.getStyleClass().add("inputError");
-			}
-		} else {
-			nombreInput.getStyleClass().remove("inputError");
-		}
 
 		// Descripcion
 		String descripcion = descripcionInput.getText();
@@ -273,11 +286,12 @@ public class ControllerGraficoPuestos_Dialog {
 
 		// setear valores puesto
 		if (formValid) {
-			puestoDTO.setIdPuesto(Integer.parseInt(codigoInput.getText()));
+			puestoDTO.setCodigoPuesto(Integer.parseInt(codigoInput.getText()));
 			puestoDTO.setNombrePuesto(nombre);
 			puestoDTO.setDescripcionPuesto(descripcion);
 			puestoDTO.setIdEmpresa(empresaDTO.getIdEmpresa());
 			puestoDTO.setCaracteristicasDTO(caracteristicasDTO);
+			puestoDTO.setIdPuesto(null);
 		} else {
 			caracteristicasDTO.clear();
 			if (!dialogVbox.getChildren().contains(textError)) {
@@ -285,7 +299,6 @@ public class ControllerGraficoPuestos_Dialog {
 				if (!textError.getStyleClass().contains("inputError")) {
 					textError.getStyleClass().add("textError");
 				}
-
 				textError.applyCss();
 				dialogVbox.getChildren().add(textError);
 			}

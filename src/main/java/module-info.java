@@ -8,6 +8,7 @@ module b1.capitalHumano {
 	requires java.sql;
 	requires jakarta.persistence;
 	requires java.desktop;
+	requires org.apache.commons.lang3;
 
     opens b1.capitalHumano to javafx.fxml,org.hibernate.orm.core;
     exports b1.capitalHumano;
@@ -31,7 +32,8 @@ module b1.capitalHumano {
     exports b1.capitalHumano.candidato;
     
     opens b1.capitalHumano.evaluacion to javafx.fxml,org.hibernate.orm.core;
-    exports b1.capitalHumano.evaluacion;
+    exports b1.capitalHumano.evaluacion; 
     
-
+    opens b1.capitalHumano.cuestionario to javafx.fxml,org.hibernate.orm.core;
+    exports b1.capitalHumano.cuestionario;
 }

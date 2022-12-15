@@ -17,7 +17,5 @@ public interface PuestoDAO {
 	public List<Puesto> getByFilter(Empresa empresa);
 	public List<Puesto> getByFilter(String texto);
 	public Puesto getById(Integer id);
-	public Set<Evaluacion> getEvaluaciones(Integer idPuesto);
 	public List<Puesto> buscarPuestos(Integer codigo, String nombre, String empresa);
-	public List<Puesto> buscarPuestos(String nombreInput, String empresaInput);
 	}

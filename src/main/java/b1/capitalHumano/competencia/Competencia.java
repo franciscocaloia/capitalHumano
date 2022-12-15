@@ -2,6 +2,7 @@ package b1.capitalHumano.competencia;
 
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import b1.capitalHumano.Factor;
 import b1.capitalHumano.puesto.PonderacionNecesaria;
@@ -24,19 +25,13 @@ public class Competencia {
 	Integer idComp;
 	@Column(name="nombreComp")
 	String nombreComp;
-	@Column(name="descripción")
+	@Column(name="descripcion")
 	String descripcion;
 	@Column(name="eliminado")
 	Boolean eliminado;
-	
-
-	
-
-	//@OneToMany(cascade =  CascadeType.ALL ,fetch = FetchType.EAGER,orphanRemoval = true,targetEntity=Factor.class)
-	//@JoinColumn(name = "idComp")
-	//Set<Factor> Factores ;
-
-//	ArrayList<Integer> idDactores
+	@OneToMany(cascade =  CascadeType.ALL ,fetch = FetchType.EAGER,orphanRemoval = true,targetEntity=Factor.class)
+	@JoinColumn(name = "idComp")
+	Set<Factor> factores ;
 
 	public Competencia(){
 	}
@@ -67,5 +62,22 @@ public class Competencia {
 	}
 	public void setEliminado(Boolean eliminado) {
 		this.eliminado = eliminado;
+	}
+	
+	public Set<Factor> getFactores(){
+		return this.factores;
+	}
+	
+	public Set<Factor> getFactoresEvaluables(){
+		return this.factores.stream().filter(factor->factor.getPreguntas().size()>0).collect(Collectors.toSet());
+	}
+	
+	public Boolean isEvaluable() {
+		for (Factor factor : factores) {
+			if(factor.getPreguntas().size()>0) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

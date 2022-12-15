@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" scaleShape="false" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="b1.capitalHumano.candidato.ControllerEvaluar_Final_CandidatoGrafico">
+<VBox prefHeight="600.0" prefWidth="800.0" scaleShape="false" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="b1.capitalHumano.candidato.ControllerGraficoEvaluarCandidatos_ListaCandidatosClaves">
 	<children>
 		<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
 			<children>
@@ -68,7 +68,7 @@
 						<TableColumn fx:id="claveColumn" prefWidth="179.0" text="Clave de Ingreso" />
 					</columns>
 				</TableView>
-				<Button defaultButton="true" layoutX="703.0" layoutY="547.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0" style="-fx-background-color: none; -fx-border-width: 2px; -fx-border-color: black;" text="Finalizar">
+				<Button defaultButton="true" layoutX="703.0" layoutY="547.0" mnemonicParsing="false" onAction="#handleEvaluarCandidatos_finalizar" prefHeight="25.0" prefWidth="82.0" style="-fx-background-color: none; -fx-border-width: 2px; -fx-border-color: black;" text="Finalizar">
 					<font>
 						<Font name="Consolas" size="11.0" />
 					</font>

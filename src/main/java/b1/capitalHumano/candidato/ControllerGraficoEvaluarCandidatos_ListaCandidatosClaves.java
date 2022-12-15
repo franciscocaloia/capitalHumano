@@ -7,27 +7,35 @@ import java.util.Set;
 import b1.capitalHumano.App;
 import b1.capitalHumano.consultor.ConsultorDTO;
 import b1.capitalHumano.consultor.ControllerGraficoPantallaPrincipal;
+import b1.capitalHumano.cuestionario.ControllerCuestionario;
 import b1.capitalHumano.empresa.ControllerEmpresa;
 import b1.capitalHumano.empresa.EmpresaDTO;
+import b1.capitalHumano.evaluacion.ControllerEvaluacion;
 import b1.capitalHumano.puesto.ControllerGraficoPuestos;
 import b1.capitalHumano.puesto.ControllerPuestos;
 import b1.capitalHumano.puesto.PonderacionNecesariaDTO;
+import b1.capitalHumano.puesto.PuestoDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-public class ControllerEvaluar_Final_CandidatoGrafico {
-	ControllerCandidato controllerCandidato = new ControllerCandidato();
-	ControllerEmpresa controllerEmpresa = new ControllerEmpresa();
-	ControllerPuestos controllerPuestos = new ControllerPuestos();
+public class ControllerGraficoEvaluarCandidatos_ListaCandidatosClaves {
+	ControllerEvaluacion controllerEvaluacion = ControllerEvaluacion.getInstance();
+	ControllerCandidato controllerCandidato = ControllerCandidato.getInstance();
+	ControllerEmpresa controllerEmpresa = ControllerEmpresa.getInstance();
+	ControllerPuestos controllerPuestos = ControllerPuestos.getInstance();
 	private static FXMLLoader fxmlLoader;
 	List<CandidatoDTO> candidatosDTO;
+	PuestoDTO puestoDTO;
 	ConsultorDTO consultorDTO;
 	@FXML
 	TableView<CandidatoDTO> candidatoTable;
@@ -44,19 +52,32 @@ public class ControllerEvaluar_Final_CandidatoGrafico {
 	@FXML
 	TableColumn<CandidatoDTO, Integer> claveColumn;
 
-	public void setCandidatoDTO(List<CandidatoDTO> candidatosDTO) {
+	public void setCandidatosDTO(List<CandidatoDTO> candidatosDTO) {
 		this.candidatosDTO = candidatosDTO;
 		candidatosDTOOl = FXCollections.observableArrayList(candidatosDTO);
-		// ponderacionNecesariaDTOOl.forEach(e ->
-		// System.out.println(e.getCompetencia()));
-		// System.out.println(ponderacionNecesariaDTOOl.size());
 		candidatoTable.setItems(candidatosDTOOl);
+	}
 
-		//
-		// System.out.println("aaaaaaaaaaaaaaaaaa");
+	public void setPuestoDTO(PuestoDTO puestoDTO) {
+		this.puestoDTO = puestoDTO;
+	}
 
-		// OBTENER TIPO DNI
-
+	public void handleEvaluarCandidatos_finalizar() {
+//		controllerCandidato.modificarCandidato(candidatosDTO);
+//		controllerEvaluacion.evaluarCandidatos(candidatosDTO, puestoDTO);
+		Alert alert = new Alert(AlertType.INFORMATION, "Candidatos evaluados correctamente.",ButtonType.CLOSE);
+		alert.setTitle("Evaluar candidatos");
+		alert.show();
+		
+		try {
+			stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		ControllerGraficoEvaluarCandidatos controllerEvaluarCandidatoGrafico = (ControllerGraficoEvaluarCandidatos) fxmlLoader
+				.getController();
+		controllerEvaluarCandidatoGrafico.setStageAndSetupListeners(stage);
+		controllerEvaluarCandidatoGrafico.setConsultorDTO(consultorDTO);
 	}
 
 	public void gestionarPuestoHandleMenu() {
@@ -75,24 +96,24 @@ public class ControllerEvaluar_Final_CandidatoGrafico {
 		controllerGraficoPuestos.setConsultorDTO(consultorDTO);
 	}
 
-public void cancelarHandle() {
-	try {
-		stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-FiltrarYSeleccionarEmpleados"));
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	public void cancelarHandle() {
+		try {
+			stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		ControllerGraficoEvaluarCandidatos controllerGraficoCandidato = (ControllerGraficoEvaluarCandidatos) fxmlLoader
+				.getController();
+		//
+
+		// pasar datos al controller de la nueva scene/root
+
+		controllerGraficoCandidato.setStageAndSetupListeners(stage);
+		controllerGraficoCandidato.setConsultorDTO(consultorDTO);
+
 	}
-
-	ControllerEvaluarCandidatoGrafico controllerGraficoCandidato = (ControllerEvaluarCandidatoGrafico) fxmlLoader
-			.getController();
-	//
-
-	// pasar datos al controller de la nueva scene/root
-
-	controllerGraficoCandidato.setStageAndSetupListeners(stage);
-	controllerGraficoCandidato.setConsultorDTO(consultorDTO);
-	
-}
 
 	public void inicioHandleMenu() throws IOException {
 
@@ -109,15 +130,10 @@ public void cancelarHandle() {
 		// List<EmpresaDTO> empresasDTO = ControllerEmpresa.getEmpresas();
 		// System.out.println(empresasDTO.size());
 		// empresaChoice.setItems(FXCollections.observableArrayList(empresasDTO));
-
 		apellidoColumn.setCellValueFactory(new PropertyValueFactory<CandidatoDTO, String>("apellido"));
 		nombreColumn.setCellValueFactory(new PropertyValueFactory<CandidatoDTO, String>("nombre"));
 		claveColumn.setCellValueFactory(new PropertyValueFactory<CandidatoDTO, Integer>("clave"));
-
 		numDocColumn.setCellValueFactory(new PropertyValueFactory<CandidatoDTO, Integer>("DNI"));
-
-		// Obtener DNI
-		//
 		tipoDocColumn.setCellValueFactory(new PropertyValueFactory<CandidatoDTO, String>("tipo"));
 	}
 
@@ -128,7 +144,6 @@ public void cancelarHandle() {
 
 	public void setConsultorDTO(ConsultorDTO consultorDTO) {
 		this.consultorDTO = consultorDTO;
-
 	}
 
 	public void setStageAndSetupListeners(Stage stage) {

@@ -30,11 +30,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ControllerGraficoPuestoModificar_Dialog {
-	PuestoDAO puestoDAO = new PuestoDAOImp();
-	EmpresaDAO empresaDAO = new EmpresaDAOImp();
-	ControllerPuestos controllerPuesto = new ControllerPuestos();
+
+	ControllerPuestos controllerPuesto =  ControllerPuestos.getInstance();
+	ControllerEmpresa controllerEmpresa= ControllerEmpresa.getInstance();
 	PuestoDTO puestoDTO;
-	CompetenciaDAO competenciaDAO = new CompetenciaDAOImp();
+
 	EmpresaDTO empresaDTO;
 	ObservableList<EmpresaDTO> empresaOL;
 	ObservableList<CompetenciaDTO> competenciaOL;
@@ -69,7 +69,7 @@ public class ControllerGraficoPuestoModificar_Dialog {
 	List<EmpresaDTO> empresasDTO;
 
 	public void initialize() {
-		empresasDTO = ControllerEmpresa.getEmpresas();
+		empresasDTO = controllerEmpresa.getEmpresas();
 		empresaOL = FXCollections.observableArrayList(empresasDTO);
 		competenciaOL = FXCollections.observableArrayList(competenciasDTOList);
 		empresaChoice.setItems(empresaOL);
@@ -266,7 +266,6 @@ public class ControllerGraficoPuestoModificar_Dialog {
 			puestoDTO.setDescripcionPuesto(descripcion);
 			puestoDTO.setIdEmpresa(empresaDTO.getIdEmpresa());
 			puestoDTO.setCaracteristicasDTO(caracteristicasDTO);
-		
 		} else {
 			caracteristicasDTO.clear();
 			if (!dialogVbox.getChildren().contains(textError)) {

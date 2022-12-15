@@ -4,20 +4,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import b1.capitalHumano.Cuestionario;
+import b1.capitalHumano.cuestionario.Cuestionario;
+import b1.capitalHumano.cuestionario.CuestionarioDTO;
 
 public class CandidatoDTO {
+	private Integer idCandidato;
 	private String clave;
-	private Integer DNI;
-
 	private String nombre;
 	private String apellido;
-	private Integer idCandidato;
-	String primerTipoDoc;
-	private String tipo ;
-	
-	private Cuestionario cuestionarioActivo;
-
+	private Integer DNI;
+	private String tipo;
+	private CuestionarioDTO cuestionarioActivo;
 	public String getApellido() {
 		return apellido;
 	}
@@ -34,11 +31,11 @@ public class CandidatoDTO {
 		this.nombre = nombre;
 	}
 
-	public Cuestionario getCuestionarioActivo() {
+	public CuestionarioDTO getCuestionarioActivo() {
 		return cuestionarioActivo;
 	}
 
-	public void setCuestionarioActivo(Cuestionario cuestionarioActivo) {
+	public void setCuestionarioActivo(CuestionarioDTO cuestionarioActivo) {
 		this.cuestionarioActivo = cuestionarioActivo;
 	}
 
@@ -78,7 +75,7 @@ public class CandidatoDTO {
 		this.tipo = tipo;
 	}
 	
-	public Cuestionario getActivo() {
+	public CuestionarioDTO getActivo() {
 		return cuestionarioActivo;
 	}
 

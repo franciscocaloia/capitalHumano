@@ -19,19 +19,24 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-public class ControllerEvaluar_SeleccionarPuesto_CandidatoGrafico {
-	ControllerCandidato controllerCandidato = new ControllerCandidato();
-	ControllerEmpresa controllerEmpresa = new ControllerEmpresa();
-	ControllerPuestos controllerPuestos = new ControllerPuestos();
+public class ControllerGraficoEvaluarCandidatos_SeleccionarPuesto {
+	ControllerCandidato controllerCandidato = ControllerCandidato.getInstance();
+	ControllerEmpresa controllerEmpresa = ControllerEmpresa.getInstance();
+	ControllerPuestos controllerPuestos = ControllerPuestos.getInstance();
 	private static FXMLLoader fxmlLoader;
 	ConsultorDTO consultorDTO;
 	List<CandidatoDTO> candidatosDTO;
+	PuestoDTO puestoDTO;
 	Stage stage;
 	@FXML
 	ChoiceBox<PuestoDTO> puestoChoice = new ChoiceBox<>();
@@ -43,24 +48,41 @@ public class ControllerEvaluar_SeleccionarPuesto_CandidatoGrafico {
 	TableColumn<PonderacionNecesariaDTO, Integer> ponderacionColumn;
 	@FXML
 	TableColumn<PonderacionNecesariaDTO, String> competenciaColumn;
-	ObservableList<PonderacionNecesariaDTO> ponderacionNecesariaDTOOl ;
+	ObservableList<PonderacionNecesariaDTO> ponderacionNecesariaDTOOl;
 	ObservableList<PuestoDTO> PuestoDTOOl;
 
 	public void setCandidatoDTO(List<CandidatoDTO> candidatosDTO) {
 		this.candidatosDTO = candidatosDTO;
-
 	}
 
 	public void initialize() {
-		// candidatoTable.setSelectionModel(null);
 		
-		List<EmpresaDTO> empresasDTO = ControllerEmpresa.getEmpresas();
-		// System.out.println(empresasDTO.size());
-		empresaChoice.setItems(FXCollections.observableArrayList(empresasDTO));
 
+		ObservableList<EmpresaDTO> empresaDTOOl = FXCollections.observableArrayList(controllerEmpresa.getEmpresas());
+
+		empresaDTOOl.sort((o1, o2) -> o1.getNombreEmpresa().compareTo(o2.getNombreEmpresa()));
+
+		empresaChoice.setItems(empresaDTOOl);
 		ponderacionColumn.setCellValueFactory(
 				new PropertyValueFactory<PonderacionNecesariaDTO, Integer>("ponderacionNecesaria"));
 		competenciaColumn.setCellValueFactory(new PropertyValueFactory<PonderacionNecesariaDTO, String>("competencia"));
+		candidatoTable.setRowFactory((table)->{
+			final TableRow<PonderacionNecesariaDTO> row = new TableRow<>() {
+				@Override
+				 protected void updateItem(PonderacionNecesariaDTO foo, boolean empty) {
+	                super.updateItem(foo, empty);
+	                if(foo !=null) {
+	                	  if (!foo.getEvaluable()) {
+	                    getStyleClass().add("row-error");
+	                } else { /* remove if condition no longer true */
+	                    getStyleClass().remove("row-error");
+	                }
+	                }
+	              
+	            }
+			};
+			return row;
+		});
 	}
 
 	private static Parent loadFXML(String fxml) throws IOException {
@@ -70,9 +92,9 @@ public class ControllerEvaluar_SeleccionarPuesto_CandidatoGrafico {
 
 	public void volverHandle() {
 		try {
-			stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-FiltrarYSeleccionarEmpleados"));
+			stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos"));
 
-			ControllerEvaluarCandidatoGrafico controllerEvaluarCandidatoGrafico = (ControllerEvaluarCandidatoGrafico) fxmlLoader
+			ControllerGraficoEvaluarCandidatos controllerEvaluarCandidatoGrafico = (ControllerGraficoEvaluarCandidatos) fxmlLoader
 					.getController();
 			controllerEvaluarCandidatoGrafico.setStageAndSetupListeners(stage);
 			controllerEvaluarCandidatoGrafico.setConsultorDTO(consultorDTO);
@@ -81,7 +103,6 @@ public class ControllerEvaluar_SeleccionarPuesto_CandidatoGrafico {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	public void setConsultorDTO(ConsultorDTO consultorDTO) {
@@ -95,20 +116,23 @@ public class ControllerEvaluar_SeleccionarPuesto_CandidatoGrafico {
 	}
 
 	public void empresaChoiceSelected() {
-
-		// puestoChoice.setSelectionModel(null);
+		if (PuestoDTOOl != null && !PuestoDTOOl.isEmpty()) {
+			PuestoDTOOl.clear();
+		}
+		puestoChoice.getSelectionModel().clearSelection();
 		puestoChoice.setValue(null);
+		puestoChoice.valueProperty().set(null);
 
 		List<PuestoDTO> puestosDTO = controllerPuestos.buscarPuestos(empresaChoice.getValue());
-		// System.out.println(puestoDTO.size());
 
-		// puestoDTO.forEach(e -> System.out.println(e.getCaracteristicasDTO().size()));
-		///
 		PuestoDTOOl = FXCollections.observableArrayList(puestosDTO);
 
 		Predicate<PuestoDTO> estaEliminado = p -> p.getEliminado() == true;
 
 		PuestoDTOOl.removeIf(estaEliminado);
+
+		PuestoDTOOl.sort((o1, o2) -> o1.getNombrePuesto().compareTo(o2.getNombrePuesto()));
+
 		puestoChoice.setItems(PuestoDTOOl);
 
 	}
@@ -120,17 +144,12 @@ public class ControllerEvaluar_SeleccionarPuesto_CandidatoGrafico {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		ControllerGraficoPuestos controllerGraficoPuestos = (ControllerGraficoPuestos) fxmlLoader.getController();
-
-		// pasar datos al controller de la nueva scene/root
-
 		controllerGraficoPuestos.setStageAndSetupListeners(stage);
 		controllerGraficoPuestos.setConsultorDTO(consultorDTO);
 	}
 
 	public void inicioHandleMenu() throws IOException {
-
 		stage.getScene().setRoot(loadFXML("PantallaPrincipal"));
 		ControllerGraficoPantallaPrincipal controllerGraficoPantallaPrincipal = (ControllerGraficoPantallaPrincipal) fxmlLoader
 				.getController();
@@ -139,41 +158,39 @@ public class ControllerEvaluar_SeleccionarPuesto_CandidatoGrafico {
 	}
 
 	public void siguienteHandle() {
-		/// Si la competencia a evaluar no posee
-		// definidos factores con al menos 2 preguntas, dicha competencia no podrá ser
-		/// evaluada
-		if (ponderacionNecesariaDTOOl != null &&!ponderacionNecesariaDTOOl.isEmpty()) {
-
-			try {
-
-				stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-ListaCandidatosaEvaluar"));
-
-				ControllerEvaluar_Final_CandidatoGrafico controllerEvaluar_Final_CandidatoGrafico = (ControllerEvaluar_Final_CandidatoGrafico) fxmlLoader
-						.getController();
-
-				// pasar datos al controller de la nueva scene/root
-
-				controllerEvaluar_Final_CandidatoGrafico.setStageAndSetupListeners(stage);
-				controllerEvaluar_Final_CandidatoGrafico.setConsultorDTO(consultorDTO);
-				// candidatosDTO.forEach(e -> System.out.println(e.getClave()));
-				controllerEvaluar_Final_CandidatoGrafico.setCandidatoDTO(candidatosDTO);
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		if (puestoDTO != null) {
+			if (puestoDTO.getEvaluable()) {
+				try {
+					controllerCandidato.generateRandomKey(candidatosDTO);
+					stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-ListaCandidatosClaves"));
+					ControllerGraficoEvaluarCandidatos_ListaCandidatosClaves controllerGraficoEvaluarCandidatos_ListaCandidatosClave = (ControllerGraficoEvaluarCandidatos_ListaCandidatosClaves) fxmlLoader
+							.getController();
+					controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setStageAndSetupListeners(stage);
+					controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setConsultorDTO(consultorDTO);
+					controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setCandidatosDTO(candidatosDTO);
+					controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setPuestoDTO(puestoChoice.getValue());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+			else {
+				Alert alert = new Alert(AlertType.ERROR, "El puesto no es evaluable",
+						ButtonType.CLOSE);
+				alert.setTitle("Evaluar candidatos - seleccionar puesto");
+				alert.show();
+			}
+		} else {
+			Alert alert = new Alert(AlertType.WARNING, "Debe seleccionar un puesto antes de continuar",
+					ButtonType.CLOSE);
+			alert.setTitle("Evaluar candidatos - seleccionar puesto");
+			alert.show();
 		}
-
 	}
 
 	public void puestoChoiceSelected() {
-		Set<PonderacionNecesariaDTO> ponderacionNecesariaDTO = puestoChoice.getValue().getCaracteristicasDTO();
-		ponderacionNecesariaDTOOl = FXCollections.observableArrayList(ponderacionNecesariaDTO);
-		// ponderacionNecesariaDTOOl.forEach(e ->
-		// System.out.println(e.getCompetencia()));
-		// System.out.println(ponderacionNecesariaDTOOl.size());
-
+		puestoDTO = puestoChoice.getValue();
+		Set<PonderacionNecesariaDTO> ponderacionesNecesariasDTO = puestoDTO.getCaracteristicasDTO();
+		ponderacionNecesariaDTOOl = FXCollections.observableArrayList(ponderacionesNecesariasDTO).sorted((ponderacion1,ponderacion2)->Boolean.compare(ponderacion1.getEvaluable(), ponderacion2.getEvaluable()));
 		candidatoTable.setItems(ponderacionNecesariaDTOOl);
-
 	}
 }

@@ -1,4 +1,4 @@
-package b1.capitalHumano;
+package b1.capitalHumano.cuestionario;
 
 import javafx.stage.Stage;
 

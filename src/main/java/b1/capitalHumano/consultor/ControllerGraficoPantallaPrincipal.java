@@ -3,7 +3,7 @@ package b1.capitalHumano.consultor;
 import java.io.IOException;
 
 import b1.capitalHumano.App;
-import b1.capitalHumano.candidato.ControllerEvaluarCandidatoGrafico;
+import b1.capitalHumano.candidato.ControllerGraficoEvaluarCandidatos;
 import b1.capitalHumano.puesto.ControllerGraficoPuestos;
 import b1.capitalHumano.usuario.ControllerGraficoAutenticarUsuario;
 import javafx.fxml.FXML;
@@ -45,9 +45,9 @@ public class ControllerGraficoPantallaPrincipal {
 
 	public void evaluarHandleMenu() throws IOException {
 
-		stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-FiltrarYSeleccionarEmpleados"));
+		stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos"));
 
-		ControllerEvaluarCandidatoGrafico controllerGraficoCandidato = (ControllerEvaluarCandidatoGrafico) fxmlLoader
+		ControllerGraficoEvaluarCandidatos controllerGraficoCandidato = (ControllerGraficoEvaluarCandidatos) fxmlLoader
 				.getController();
 		//
 

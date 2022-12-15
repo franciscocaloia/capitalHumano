@@ -1,11 +1,14 @@
 package b1.capitalHumano.candidato;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
-import b1.capitalHumano.Cuestionario;
 import b1.capitalHumano.competencia.Competencia;
 import b1.capitalHumano.consultor.Consultor;
+import b1.capitalHumano.cuestionario.Cuestionario;
+import b1.capitalHumano.cuestionario.EstadoCuestionario;
+import b1.capitalHumano.puesto.PonderacionNecesaria;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,9 +28,6 @@ public class Candidato {
 	@Id
 	@Column(name = "idCandidato")
 	Integer idCandidato;
-//	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Consultor.class)
-//	@JoinColumn(name = "idConsultor")
-	// Consultor consultor;
 	@Column(name = "clave")
 	String clave;
 	@Column(name = "nombre")
@@ -48,28 +48,10 @@ public class Candidato {
 	Boolean eliminado;
 	@Column(name = "tipo")
 	String tipo;
-
+	@OneToMany( fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Cuestionario.class)
+	@JoinColumn(name = "idCandidato", updatable = false)
+	Set<Cuestionario> cuestionariosFinalizados = new HashSet<Cuestionario>();
 	
-	
-	//@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//	@JoinColumn(name = "idCandidato")
-	//Set<TipoDNI> tipo;
-
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "idCandidato")
-	Cuestionario cuestionarioActivo;
-//	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//	@JoinColumn(name = "idCandidato")
-//	Set<Cuestionario> cuestionarioRealizo;;
-
-//	public Consultor getConsultor() {
-//		return consultor;
-//	}
-
-//	public void setConsultor(Consultor consultor) {
-//		this.consultor = consultor;
-//	}
-
 	public String getApellido() {
 		return apellido;
 	}
@@ -119,6 +101,24 @@ public class Candidato {
 	}
 
 	public Cuestionario getActivo() {
-		return cuestionarioActivo;
+		for (Cuestionario cuestionario : cuestionariosFinalizados) {
+			System.out.println(cuestionario.getEstado());
+			if(cuestionario.getEstado().equals(EstadoCuestionario.Activo)){
+				return cuestionario;
+			}
+		}
+		return null;
+	}
+
+	public void setAtributos(CandidatoDTO candidatoDTO) {
+		this.nombre=candidatoDTO.getNombre();
+		this.apellido=candidatoDTO.getApellido();
+		this.DNI=candidatoDTO.getDNI();
+		this.tipo=candidatoDTO.getTipo();
+		this.clave=candidatoDTO.getClave();
+	}
+
+	public void addCuestionario(Cuestionario cuestionario) {
+		this.cuestionariosFinalizados.add(cuestionario);
 	}
 }

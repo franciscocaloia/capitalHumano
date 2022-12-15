@@ -32,10 +32,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-public class ControllerEvaluarCandidatoGrafico {
-	ControllerCandidato controllerCandidato = new ControllerCandidato();
-	ControllerEmpresa controllerEmpresa = new ControllerEmpresa();
-	ControllerPuestos controllerPuestos = new ControllerPuestos();
+public class ControllerGraficoEvaluarCandidatos {
+	ControllerCandidato controllerCandidato = ControllerCandidato.getInstance();
+	ControllerEmpresa controllerEmpresa = ControllerEmpresa.getInstance();
+	ControllerPuestos controllerPuestos = ControllerPuestos.getInstance();
+	
 	@FXML
 	TableView<CandidatoDTO> candidatoTable;
 	@FXML
@@ -65,13 +66,9 @@ public class ControllerEvaluarCandidatoGrafico {
 	private static FXMLLoader fxmlLoader;
 	Stage stage;
 	ObservableList<CandidatoDTO> CandidatoOl;
-	ObservableList<CandidatoDTO> CandidatoOlEv;
+	ObservableList<CandidatoDTO> CandidatoOlEv =  FXCollections.observableArrayList();
 
 	public void initialize() {
-
-		// ELIMINAR ESTOS OBJS DE EJEMPLO
-
-		///////////////////
 
 		candidatoTableEv.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		candidatoTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -84,7 +81,7 @@ public class ControllerEvaluarCandidatoGrafico {
 		nombreCandidatoColumnEv.setCellValueFactory(new PropertyValueFactory<CandidatoDTO, String>("nombre"));
 		apellidoCandidatoColumnEv.setCellValueFactory(new PropertyValueFactory<CandidatoDTO, String>("apellido"));
 
-		List<CandidatoDTO> cadidatosDTO = controllerCandidato.getCandidatos();
+		List<CandidatoDTO> cadidatosDTO = controllerCandidato.getCandidatosSinActivo();
 		CandidatoOl = FXCollections.observableArrayList(cadidatosDTO);
 
 		candidatoTable.setItems(CandidatoOl);
@@ -101,22 +98,13 @@ public class ControllerEvaluarCandidatoGrafico {
 	}
 
 	public void agregarCandidatoHandle() {
-
-		if (CandidatoOlEv == null) {
-			CandidatoOlEv = FXCollections.observableArrayList(candidatoTable.getSelectionModel().getSelectedItems());
-		} else {
-
 			for (CandidatoDTO candidatoDTO : candidatoTable.getSelectionModel().getSelectedItems()) {
 				FilteredList<CandidatoDTO> listaFiltrada = CandidatoOlEv
 						.filtered(e -> e.getIdCandidato() == candidatoDTO.getIdCandidato());
-
 				if (!CandidatoOlEv.contains(candidatoDTO) && listaFiltrada.isEmpty()) {
 					CandidatoOlEv.add(candidatoDTO);
 				}
 			}
-
-		}
-
 		candidatoTableEv.setItems(CandidatoOlEv);
 	}
 
@@ -156,9 +144,9 @@ public class ControllerEvaluarCandidatoGrafico {
 		if (CandidatoOlEv != null && !CandidatoOlEv.isEmpty()) {
 
 			try {
-				stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-SeleccionarFuncionPuestoaEvaluar"));
+				stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-SeleccionarPuesto"));
 
-				ControllerEvaluar_SeleccionarPuesto_CandidatoGrafico controllerEvaluar_SeleccionarPuesto_CandidatoGrafico = (ControllerEvaluar_SeleccionarPuesto_CandidatoGrafico) fxmlLoader
+				ControllerGraficoEvaluarCandidatos_SeleccionarPuesto controllerEvaluar_SeleccionarPuesto_CandidatoGrafico = (ControllerGraficoEvaluarCandidatos_SeleccionarPuesto) fxmlLoader
 						.getController();
 
 				// pasar datos al controller de la nueva scene/root

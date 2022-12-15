@@ -1,7 +1,3 @@
-CREATE TABLE TipoDNI (
-    tipoDNI varchar(255),
-    idCandidato int
-);
 CREATE TABLE Consultor (
     idConsultor int,
     contraseña int,
@@ -9,7 +5,7 @@ CREATE TABLE Consultor (
 );
 CREATE TABLE Candidato (
     idConsultor int,
-    idCandidato int NOT NULL AUTO_INCREMENT,
+    idCandidato int NOT NULL,
     clave int,
     tipo varchar(255),
     nombre varchar(255),
@@ -23,7 +19,7 @@ CREATE TABLE Candidato (
 );
 CREATE TABLE Estado (estado int, idCuestionario int);
 CREATE TABLE Cuestionario (
-    idCuestionario int NOT NULL AUTO_INCREMENT,
+    idCuestionario int NOT NULL,
     idEvaluación int,
     idPuesto int,
     idCandidatoRealiza int,
@@ -35,18 +31,18 @@ CREATE TABLE Cuestionario (
     eliminado boolean
 );
 CREATE TABLE Bloque (
-    idBloque int NOT NULL AUTO_INCREMENT,
+    idBloque int NOT NULL,
     idCuestionario int,
     nroPreguntas int
 );
 CREATE TABLE PreguntaCuestionario (
-    idPregunta int NOT NULL AUTO_INCREMENT,
+    idPregunta int NOT NULL,
     idFactor int,
     idBloque int,
     descripcion varchar(255)
 );
 CREATE TABLE OpciónCuestionario (
-    idOpcion int NOT NULL AUTO_INCREMENT,
+    idOpcion int NOT NULL,
     idPreguntaElige int,
     idPreguntaEligen int,
     descripcion varchar(255),
@@ -54,29 +50,29 @@ CREATE TABLE OpciónCuestionario (
 );
 CREATE TABLE Cuestionario_Competencia (idComp int, idCuestionario int);
 CREATE TABLE CompetenciaCuestionario (
-    idComp int NOT NULL AUTO_INCREMENT,
+    idComp int NOT NULL,
     nombreComp varchar(255),
     ponderaciónNecesaria int
 );
 CREATE TABLE FactorCuestionario (
-    idFactor int NOT NULL AUTO_INCREMENT,
+    idFactor int NOT NULL,
     idComp int,
     nombreFactor varchar(255)
 );
 CREATE TABLE Evaluación (
-    idEvaluación int NOT NULL AUTO_INCREMENT,
+    idEvaluación int NOT NULL,
     idPuesto int,
     fecha date
 );
 CREATE TABLE Puesto (
-    idPuesto int NOT NULL AUTO_INCREMENT,
+    idPuesto int NOT NULL,
     idEmpresa int,
     nombrePuesto varchar(255),
     descripción varchar(255),
     eliminado boolean
 );
 CREATE TABLE Empresa (
-    idEmpresa int NOT NULL AUTO_INCREMENT,
+    idEmpresa int NOT NULL,
     nombre varchar(255)
 );
 CREATE TABLE Puesto_Competencia (
@@ -85,20 +81,20 @@ CREATE TABLE Puesto_Competencia (
     ponderaciónNecesaria int
 );
 CREATE TABLE Competencia (
-    idComp int NOT NULL AUTO_INCREMENT,
+    idComp int NOT NULL,
     nombreComp varchar(255),
     descripción varchar(255),
     eliminado boolean
 );
 CREATE TABLE Factor (
-    idFactor int NOT NULL AUTO_INCREMENT,
+    idFactor int NOT NULL,
     idComp int,
     nombreFactor varchar(255),
     descripción varchar(255),
     eliminado boolean
 );
 CREATE TABLE Pregunta (
-    idPregunta int NOT NULL AUTO_INCREMENT,
+    idPregunta int NOT NULL,
     idFactor int,
     idOpciónRt int,
     pregunta varchar(255),
@@ -110,14 +106,14 @@ CREATE TABLE Pregunta_Opción (
     ponderación int
 );
 CREATE TABLE Opcion (
-    idOpción int NOT NULL AUTO_INCREMENT,
+    idOpción int NOT NULL,
     idOpciónRt int,
     nombre varchar(255),
     descripción varchar(255),
     eliminado boolean
 );
 CREATE TABLE OpcionRespuesta (
-    idOpcionRt int NOT NULL AUTO_INCREMENT,
+    idOpcionRt int NOT NULL,
     nombre varchar(255),
     descripción varchar(255),
     eliminado boolean
@@ -156,14 +152,12 @@ ALTER TABLE Factor
 ADD CONSTRAINT PK_Factor PRIMARY KEY (idFactor);
 ALTER TABLE FactorCuestionario
 ADD CONSTRAINT PK_idFactor PRIMARY KEY (idFactor);
-ALTER TABLE TipoDNI
-ADD CONSTRAINT PK_TipoDNI PRIMARY KEY (tipoDNI, idCandidato);
 ALTER TABLE Consultor
 ADD CONSTRAINT PK_Consultor PRIMARY KEY (idConsultor);
 ALTER TABLE Candidato
 ADD CONSTRAINT PK_Candidato PRIMARY KEY (idCandidato);
 ALTER TABLE Estado
-ADD CONSTRAINT PK_TipoDNI PRIMARY KEY (estado, idCuestionario);
+ADD CONSTRAINT PK_EstadoCuestionario PRIMARY KEY (estado, idCuestionario);
 ALTER TABLE Candidato
 ADD FOREIGN KEY (idConsultor) REFERENCES Consultor(idConsultor);
 ALTER TABLE Estado
@@ -210,7 +204,5 @@ ALTER TABLE Pregunta_Opción
 ADD FOREIGN KEY (idPregunta) REFERENCES Pregunta(idPregunta);
 ALTER TABLE Pregunta_Opción
 ADD FOREIGN KEY (idOpción) REFERENCES Opcion(idOpción);
-ALTER TABLE TipoDNI
-ADD FOREIGN KEY (idCandidato) REFERENCES Candidato(idCandidato);
 ALTER TABLE Opcion
 ADD FOREIGN KEY (idOpciónRt) REFERENCES OpcionRespuesta(idOpcionRt);

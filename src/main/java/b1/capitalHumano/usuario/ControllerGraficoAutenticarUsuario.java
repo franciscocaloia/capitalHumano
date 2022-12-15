@@ -1,17 +1,16 @@
 package b1.capitalHumano.usuario;
 
 import b1.capitalHumano.App;
-import b1.capitalHumano.ControllerGraficoCuestionario;
-import b1.capitalHumano.Cuestionario;
-import b1.capitalHumano.CuestionarioDTO;
-
 import b1.capitalHumano.candidato.CandidatoDTO;
 import b1.capitalHumano.consultor.Consultor;
 import b1.capitalHumano.consultor.ConsultorDTO;
 import b1.capitalHumano.consultor.ControllerGraficoPantallaPrincipal;
+import b1.capitalHumano.cuestionario.ControllerGraficoCuestionario;
+import b1.capitalHumano.cuestionario.Cuestionario;
+import b1.capitalHumano.cuestionario.CuestionarioDTO;
 import b1.capitalHumano.puesto.ControllerGraficoPuestoModificar_Dialog;
 import b1.capitalHumano.puesto.ControllerGraficoPuestos;
-import b1.capitalHumano.puesto.ControllerGraficoPuestos_Dialog;
+import b1.capitalHumano.puesto.ControllerGraficoPuestos_DarDeAlta;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -45,7 +44,7 @@ public class ControllerGraficoAutenticarUsuario {
 	TextField clave;
 	@FXML
 	ComboBox<String> tipo;
-
+	ControllerUsuarios controllerUsuarios = ControllerUsuarios.getInstance();
 	public static Stage stage;
 	private static FXMLLoader fxmlLoader;
 
@@ -63,9 +62,7 @@ public class ControllerGraficoAutenticarUsuario {
 
 	public void ingresarConsultor() {
 		try {
-
 			stage.getScene().setRoot(loadFXML("usuario/AutenticacionDeUsuario--iniciarSesion"));
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -119,7 +116,7 @@ public class ControllerGraficoAutenticarUsuario {
 			}
 			consultorDTO.setNombre(usuario.getText());
 			consultorDTO.setContraseña(contraseña.getText());
-			ConsultorDTO consultorDTOAutenticado = ControllerUsuarios.autenticarConsultor(consultorDTO);
+			ConsultorDTO consultorDTOAutenticado = controllerUsuarios.autenticarConsultor(consultorDTO);
 			
 			if (consultorDTOAutenticado == null) {
 
@@ -209,27 +206,21 @@ public class ControllerGraficoAutenticarUsuario {
 			candidatoDTO.setDNI(Integer.parseInt(DNI.getText()));
 			candidatoDTO.setClave(clave.getText());
 
-			CuestionarioDTO CuestionarioDTO = ControllerUsuarios.autenticarCandidato(candidatoDTO); // devovler
-
+			CuestionarioDTO CuestionarioDTO = controllerUsuarios.autenticarCandidato(candidatoDTO); // devovler
 			if (CuestionarioDTO == null) {
 
 				Alert alertError = new Alert(AlertType.ERROR, "Los datos ingresados no son válidos o no existe un cuestionario para el candidato.",
 						ButtonType.CLOSE);
 				alertError.setHeaderText("Error de Inicio de Sesión");
 				alertError.show();
-
 			} else {
-
 				try {
-					stage.getScene().setRoot(loadFXML("usuario/CompletarCuestionario-Instrucciones"));
-// pasar datos al controller de la nueva scene/root
+					stage.getScene().setRoot(loadFXML("cuestionario/CompletarCuestionario-Instrucciones"));
 					ControllerGraficoCuestionario controllerGraficoCuestionario = (ControllerGraficoCuestionario) fxmlLoader
 							.getController();
 					controllerGraficoCuestionario.setCuestionario(CuestionarioDTO);
 					controllerGraficoCuestionario.setStageAndSetupListeners(stage);
-
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

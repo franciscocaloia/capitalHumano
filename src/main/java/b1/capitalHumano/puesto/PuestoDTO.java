@@ -19,31 +19,34 @@ public class PuestoDTO {
 
 	public PuestoDTO(Puesto puesto) {
 		this.idPuesto = puesto.getIdPuesto();
+		this.codigoPuesto = puesto.getCodigoPuesto();
 		this.idEmpresa = puesto.getEmpresa().getIdEmpresa();
 		this.nombreEmpresa = puesto.getEmpresa().getNombreEmpresa();
 		this.nombrePuesto = puesto.getNombrePuesto();
 		this.descripcionPuesto = puesto.getDescripcionPuesto();
 		this.eliminado = puesto.getEliminado();
-		// TODO Auto-generated constructor stub
+		this.evaluable= puesto.isEvaluable();
 	}
 
 	public PuestoDTO() {
 		// TODO Auto-generated constructor stub
 	}
 
-	private int idPuesto;
-	private int idEmpresa;
+	private Integer idPuesto;
+	private Integer idEmpresa;
 	private String nombreEmpresa;
 	private String nombrePuesto;
 	private String descripcionPuesto;
-	private boolean eliminado;
+	private Boolean eliminado;
+	private Integer codigoPuesto;
+	private Boolean evaluable;
 	private Set<PonderacionNecesariaDTO> caracteristicasDTO = new HashSet<PonderacionNecesariaDTO>();
 
 	public int getIdPuesto() {
 		return idPuesto;
 	}
 
-	public void setIdPuesto(int idPuesto) {
+	public void setIdPuesto(Integer idPuesto) {
 		this.idPuesto = idPuesto;
 	}
 
@@ -51,7 +54,7 @@ public class PuestoDTO {
 		return idEmpresa;
 	}
 
-	public void setIdEmpresa(int idEmpresa) {
+	public void setIdEmpresa(Integer idEmpresa) {
 		this.idEmpresa = idEmpresa;
 	}
 
@@ -83,8 +86,16 @@ public class PuestoDTO {
 		return eliminado;
 	}
 
-	public void setEliminado(boolean eliminado) {
+	public void setEliminado(Boolean eliminado) {
 		this.eliminado = eliminado;
+	}
+	
+	public void setCodigoPuesto(Integer codigo) {
+		this.codigoPuesto= codigo;
+	}
+	
+	public Integer getCodigoPuesto() {
+		return this.codigoPuesto;
 	}
 
 	public void setCaracteristicasDTO(Set<PonderacionNecesariaDTO> caracteristicasDTO) {
@@ -98,5 +109,9 @@ public class PuestoDTO {
 	@Override
 	public String toString() {
 		return nombrePuesto;
+	}
+
+	public boolean getEvaluable() {
+		return this.evaluable;
 	}
 }

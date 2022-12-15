@@ -15,13 +15,8 @@ import jakarta.persistence.Table;
 @Table(name = "puesto_competencia")
 
 public class PonderacionNecesaria {
-
-
-
-	
-	
 	@Id
-	@ManyToOne(  fetch = FetchType.EAGER, targetEntity = Competencia.class)
+	@ManyToOne(fetch = FetchType.EAGER, targetEntity = Competencia.class)
 	@JoinColumn(name = "idComp")
 	Competencia competencia;
 
@@ -31,7 +26,7 @@ public class PonderacionNecesaria {
 	@JoinColumn(name = "idPuesto" )
 	Puesto puesto;
 
-	@Column(name = "ponderaciónNecesaria", nullable = true)
+	@Column(name = "ponderacionNecesaria", nullable = true)
 	Integer ponderacionNecesaria;
 	
 	public PonderacionNecesaria() {
@@ -42,7 +37,6 @@ public class PonderacionNecesaria {
 		this.competencia = competencia;
 		this.puesto = puesto;
 		this.ponderacionNecesaria = ponderacion;
-
 	}
 
 	public Puesto getPuesto() {

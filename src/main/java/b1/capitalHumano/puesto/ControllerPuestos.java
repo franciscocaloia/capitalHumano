@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import org.hibernate.MappingException;
 
+import b1.capitalHumano.Singleton;
 import b1.capitalHumano.competencia.Competencia;
 import b1.capitalHumano.competencia.CompetenciaDAO;
 import b1.capitalHumano.competencia.CompetenciaDAOImp;
@@ -19,9 +20,21 @@ import b1.capitalHumano.empresa.EmpresaDAO;
 import b1.capitalHumano.empresa.EmpresaDAOImp;
 import b1.capitalHumano.empresa.EmpresaDTO;
 import b1.capitalHumano.evaluacion.Evaluacion;
+import b1.capitalHumano.evaluacion.EvaluacionDAO;
+import b1.capitalHumano.evaluacion.EvaluacionDAOImp;
 import javafx.scene.control.Alert.AlertType;
 
-public class ControllerPuestos {
+public class ControllerPuestos implements Singleton{
+	private static ControllerPuestos instance = null;
+	public ControllerPuestos(){};
+	public static ControllerPuestos getInstance() {
+		// TODO Auto-generated method stub
+		if (instance == null) {
+			instance = new ControllerPuestos();
+		}
+		return instance;
+	}
+	EvaluacionDAO evaluacionDAO = new EvaluacionDAOImp();
 	EmpresaDAO empresaDAO = new EmpresaDAOImp();
 	PuestoDAO puestoDAO = new PuestoDAOImp();
 	CompetenciaDAO competenciaDAO = new CompetenciaDAOImp();
@@ -36,15 +49,29 @@ public class ControllerPuestos {
 
 	public List<PuestoDTO> buscarPuestos(String codigoInput, String nombreInput, String empresaInput) {
 		List<PuestoDTO> puestosDTO = new ArrayList<>();
-		// System.out.println("aaaaaaaaaaaaa");
-
 		Set<PonderacionNecesariaDTO> caracteristicasSetDTO = new HashSet<PonderacionNecesariaDTO>();
+		Integer codigoInputParse = null;
+		if (isNumber(codigoInput)) { 
+			codigoInputParse = Integer.parseInt(codigoInput);	
+		}
+		
+			for (Puesto puesto : puestoDAO.buscarPuestos(codigoInputParse, nombreInput, empresaInput)) {
+
+				PuestoDTO puestoDTO = new PuestoDTO(puesto);
+				for (PonderacionNecesaria ponderacionNecesaria : puesto.getCaracteristicas()) {
+					caracteristicasSetDTO
+							.add(new PonderacionNecesariaDTO(ponderacionNecesaria));
+				}
+				puestoDTO.setCaracteristicasDTO(caracteristicasSetDTO);
+				puestosDTO.add(puestoDTO);
+			}
+			/*
+		
+		
 		if (isNumber(codigoInput)) {
 			for (Puesto puesto : puestoDAO.buscarPuestos(Integer.parseInt(codigoInput), nombreInput, empresaInput)) {
 
-				PuestoDTO puestoDTO = new PuestoDTO(puesto.getIdPuesto(), puesto.getNombrePuesto(),
-						puesto.getEmpresa().getIdEmpresa(), puesto.getEmpresa().getNombreEmpresa(),
-						puesto.getDescripcionPuesto(), puesto.getEliminado());
+				PuestoDTO puestoDTO = new PuestoDTO(puesto);
 				for (PonderacionNecesaria ponderacionNecesaria : puesto.getCaracteristicas()) {
 					caracteristicasSetDTO
 							.add(new PonderacionNecesariaDTO(ponderacionNecesaria.getPonderacionNecesaria(),
@@ -58,10 +85,8 @@ public class ControllerPuestos {
 
 		} else {
 			for (Puesto puesto : puestoDAO.buscarPuestos(nombreInput, empresaInput)) {
-
-				PuestoDTO puestoDTO = new PuestoDTO(puesto.getIdPuesto(), puesto.getNombrePuesto(),
-						puesto.getEmpresa().getIdEmpresa(), puesto.getEmpresa().getNombreEmpresa(),
-						puesto.getDescripcionPuesto(), puesto.getEliminado());
+					
+				PuestoDTO puestoDTO = new PuestoDTO(puesto);
 
 				for (PonderacionNecesaria ponderacionNecesaria : puesto.getCaracteristicas()) {
 
@@ -76,42 +101,34 @@ public class ControllerPuestos {
 				puestosDTO.add(puestoDTO);
 			}
 		}
-
+*/
 		return puestosDTO;
 	}
 
 	public List<PuestoDTO> getPuestos() {
 		List<Puesto> puestos = puestoDAO.getAllInstances();
-
 		List<PuestoDTO> puestosDTO = new ArrayList<>();
 		for (Puesto puesto : puestos) {
-
-			PuestoDTO puestoDTO = new PuestoDTO(puesto.getIdPuesto(), puesto.getNombrePuesto(),
-					puesto.getEmpresa().getIdEmpresa(), puesto.getEmpresa().getNombreEmpresa(),
-					puesto.getDescripcionPuesto(), puesto.getEliminado());
+			PuestoDTO puestoDTO = new PuestoDTO(puesto);
 			Set<PonderacionNecesariaDTO> ponderacionNecesariaDTO = new HashSet<PonderacionNecesariaDTO>();
 			for (PonderacionNecesaria ponderacion : puesto.getCaracteristicas()) {
-				ponderacionNecesariaDTO.add(new PonderacionNecesariaDTO(ponderacion.getPonderacionNecesaria(),
-						ponderacion.getCompetencia().getIdComp()));
+				ponderacionNecesariaDTO.add(new PonderacionNecesariaDTO(ponderacion));
 			}
 			puestoDTO.setCaracteristicasDTO(ponderacionNecesariaDTO);
-
 			puestosDTO.add(puestoDTO);
-
 		}
 		return puestosDTO;
 	}
 
 	public void darDeAltaPuesto(PuestoDTO puestoDTO) {
-		Empresa empresa = empresaDAO.getById(puestoDTO.getIdEmpresa());
 		Set<PonderacionNecesaria> caracteristicas = new HashSet<PonderacionNecesaria>();
 		Puesto puesto = new Puesto();
-		puesto.setIdPuesto(puestoDTO.getIdPuesto());
+		puesto.setCodigoPuesto(puestoDTO.getCodigoPuesto());
 		puesto.setNombrePuesto(puestoDTO.getNombrePuesto());
 		puesto.setDescripcion(puestoDTO.getDescripcionPuesto());
+		Empresa empresa = empresaDAO.getById(puestoDTO.getIdEmpresa());
 		puesto.setEmpresa(empresa);
 		for (PonderacionNecesariaDTO pondDTO : puestoDTO.getCaracteristicasDTO()) {
-
 			caracteristicas.add(new PonderacionNecesaria(puesto, pondDTO.getPonderacionNecesaria(),
 					competenciaDAO.getById(pondDTO.getIdComp())));
 		}
@@ -123,21 +140,13 @@ public class ControllerPuestos {
 		// TODO Auto-generated method stuba
 		PuestoDAO puestoDAO = new PuestoDAOImp();
 		Puesto puesto = null;
-		// List<Evaluacion> listaEvaluaciones = puestoDAO.getEvaluaciones();
-
-		Set<Evaluacion> evaluaciones = puestoDAO.getEvaluaciones(idPuesto);
+		List<Evaluacion> evaluaciones = evaluacionDAO.getByPuesto(idPuesto);
 		if (evaluaciones.isEmpty()) {
-			// System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaa");
 			puesto = puestoDAO.getById(idPuesto);
 			puesto.setEliminado(true);
-
 			puestoDAO.update(puesto);
-
-			// EN EL DIAGRAMA UPDATE DEBERIA DEVOLVER ALGO Y NO SE QUE HACER CON ESO AHRE
 		}
-
 		return puesto == null ? null : new PuestoDTO(puesto);
-
 	}
 
 	public void modificarPuesto(PuestoDTO puestoDTO) {
@@ -155,36 +164,24 @@ public class ControllerPuestos {
 			caracteristicas.add(new PonderacionNecesaria(puesto, ponderacionNecesariaDTO.getPonderacionNecesaria(),
 					competenciaDAO.getById(ponderacionNecesariaDTO.getIdComp())));
 		}
-
 		puesto.setCaracteristicas(caracteristicas);
-		// puesto.getCaracteristicas().forEach(caracter -> caracter.setPuesto(puesto));
 		puestoDAO.update(puesto);
 	}
 
 	public List<PuestoDTO> buscarPuestos(EmpresaDTO empresaDTO) {
-		List<PuestoDTO> puestosDTO = new ArrayList<PuestoDTO>();
-
 		Empresa empresa = empresaDAO.getById(empresaDTO.getIdEmpresa());
-
+		List<PuestoDTO> puestosDTO = new ArrayList<PuestoDTO>();
 		List<Puesto> puestos = puestoDAO.getByFilter(empresa);
-
 		for (Puesto puesto : puestos) {
 			PuestoDTO puestoDTO = new PuestoDTO(puesto);
 			Set<PonderacionNecesariaDTO> caracteristicasSetDTO = new HashSet<PonderacionNecesariaDTO>();
 			for (PonderacionNecesaria ponderacionNecesaria : puesto.getCaracteristicas()) {
-
 				caracteristicasSetDTO
-						.add(new PonderacionNecesariaDTO(ponderacionNecesaria.getPonderacionNecesaria(),
-								ponderacionNecesaria.getCompetencia().getIdComp(), ponderacionNecesaria.getCompetencia().getNombreComp()));
-		
-
+						.add(new PonderacionNecesariaDTO(ponderacionNecesaria));
 			}
 			puestoDTO.setCaracteristicasDTO(caracteristicasSetDTO);
 			puestosDTO.add(puestoDTO);
-
 		}
-
-
 		return puestosDTO;
 	}
 }
