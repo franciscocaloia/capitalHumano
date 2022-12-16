@@ -1,3 +1,10 @@
 .row-error{
 	-fx-border-color: red;
 }
+.inputError{
+	-fx-border-color:red;
+}
+
+.textError{
+	-fx-color:red;
+}

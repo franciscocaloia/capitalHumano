@@ -1,6 +1,7 @@
 package b1.capitalHumano.candidato;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -56,7 +57,6 @@ public class ControllerGraficoEvaluarCandidatos_SeleccionarPuesto {
 	}
 
 	public void initialize() {
-		
 
 		ObservableList<EmpresaDTO> empresaDTOOl = FXCollections.observableArrayList(controllerEmpresa.getEmpresas());
 
@@ -66,20 +66,21 @@ public class ControllerGraficoEvaluarCandidatos_SeleccionarPuesto {
 		ponderacionColumn.setCellValueFactory(
 				new PropertyValueFactory<PonderacionNecesariaDTO, Integer>("ponderacionNecesaria"));
 		competenciaColumn.setCellValueFactory(new PropertyValueFactory<PonderacionNecesariaDTO, String>("competencia"));
-		candidatoTable.setRowFactory((table)->{
+		candidatoTable.setRowFactory((table) -> {
 			final TableRow<PonderacionNecesariaDTO> row = new TableRow<>() {
 				@Override
-				 protected void updateItem(PonderacionNecesariaDTO foo, boolean empty) {
-	                super.updateItem(foo, empty);
-	                if(foo !=null) {
-	                	  if (!foo.getEvaluable()) {
-	                    getStyleClass().add("row-error");
-	                } else { /* remove if condition no longer true */
-	                    getStyleClass().remove("row-error");
-	                }
-	                }
-	              
-	            }
+				protected void updateItem(PonderacionNecesariaDTO foo, boolean empty) {
+					getStyleClass().removeAll("row-error");
+					super.updateItem(foo, empty);
+					if (foo != null) {
+						if (!foo.getEvaluable()) {
+							getStyleClass().add("row-error");
+						} else { /* remove if condition no longer true */
+							getStyleClass().removeAll("row-error");
+						}
+					}
+
+				}
 			};
 			return row;
 		});
@@ -116,11 +117,13 @@ public class ControllerGraficoEvaluarCandidatos_SeleccionarPuesto {
 	}
 
 	public void empresaChoiceSelected() {
+		empresaChoice.getStyleClass().removeAll("inputError");
 		if (PuestoDTOOl != null && !PuestoDTOOl.isEmpty()) {
 			PuestoDTOOl.clear();
 		}
 		puestoChoice.getSelectionModel().clearSelection();
 		puestoChoice.setValue(null);
+		// System.out.println("aaaaaaaaaaaaa");
 		puestoChoice.valueProperty().set(null);
 
 		List<PuestoDTO> puestosDTO = controllerPuestos.buscarPuestos(empresaChoice.getValue());
@@ -158,39 +161,64 @@ public class ControllerGraficoEvaluarCandidatos_SeleccionarPuesto {
 	}
 
 	public void siguienteHandle() {
-		if (puestoDTO != null) {
-			if (puestoDTO.getEvaluable()) {
-				try {
-					controllerCandidato.generateRandomKey(candidatosDTO);
-					stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-ListaCandidatosClaves"));
-					ControllerGraficoEvaluarCandidatos_ListaCandidatosClaves controllerGraficoEvaluarCandidatos_ListaCandidatosClave = (ControllerGraficoEvaluarCandidatos_ListaCandidatosClaves) fxmlLoader
-							.getController();
-					controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setStageAndSetupListeners(stage);
-					controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setConsultorDTO(consultorDTO);
-					controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setCandidatosDTO(candidatosDTO);
-					controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setPuestoDTO(puestoChoice.getValue());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+
+		if (empresaChoice.getValue() == null) {
+			Alert alert = new Alert(AlertType.ERROR, "Debe seleccionar una empresa", ButtonType.CLOSE);
+			alert.setTitle("Evaluar candidatos - seleccionar empresa");
+			alert.show();
+
+			if (!empresaChoice.getStyleClass().contains("inputError")) {
+				empresaChoice.getStyleClass().add("inputError");
 			}
-			else {
-				Alert alert = new Alert(AlertType.ERROR, "El puesto no es evaluable",
+		} else {
+			if (puestoDTO != null) {
+				if (puestoDTO.getEvaluable()) {
+					try {
+
+						controllerCandidato.generateRandomKey(candidatosDTO);
+						stage.getScene().setRoot(loadFXML("candidato/EvaluarCandidatos-ListaCandidatosClaves"));
+						ControllerGraficoEvaluarCandidatos_ListaCandidatosClaves controllerGraficoEvaluarCandidatos_ListaCandidatosClave = (ControllerGraficoEvaluarCandidatos_ListaCandidatosClaves) fxmlLoader
+								.getController();
+						controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setStageAndSetupListeners(stage);
+						controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setConsultorDTO(consultorDTO);
+						controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setCandidatosDTO(candidatosDTO);
+						controllerGraficoEvaluarCandidatos_ListaCandidatosClave.setPuestoDTO(puestoChoice.getValue());
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					Alert alert = new Alert(AlertType.ERROR, "El puesto no es evaluable", ButtonType.CLOSE);
+					alert.setTitle("Evaluar candidatos - seleccionar puesto");
+					alert.show();
+					if (!puestoChoice.getStyleClass().contains("inputError")) {
+						puestoChoice.getStyleClass().add("inputError");
+					}
+				}
+			} else {
+				Alert alert = new Alert(AlertType.ERROR, "Debe seleccionar un puesto antes de continuar",
 						ButtonType.CLOSE);
 				alert.setTitle("Evaluar candidatos - seleccionar puesto");
 				alert.show();
+
+				if (!puestoChoice.getStyleClass().contains("inputError")) {
+					puestoChoice.getStyleClass().add("inputError");
+				}
 			}
-		} else {
-			Alert alert = new Alert(AlertType.WARNING, "Debe seleccionar un puesto antes de continuar",
-					ButtonType.CLOSE);
-			alert.setTitle("Evaluar candidatos - seleccionar puesto");
-			alert.show();
 		}
 	}
 
 	public void puestoChoiceSelected() {
 		puestoDTO = puestoChoice.getValue();
-		Set<PonderacionNecesariaDTO> ponderacionesNecesariasDTO = puestoDTO.getCaracteristicasDTO();
-		ponderacionNecesariaDTOOl = FXCollections.observableArrayList(ponderacionesNecesariasDTO).sorted((ponderacion1,ponderacion2)->Boolean.compare(ponderacion1.getEvaluable(), ponderacion2.getEvaluable()));
-		candidatoTable.setItems(ponderacionNecesariaDTOOl);
+		if (puestoDTO != null) {
+			puestoChoice.getStyleClass().removeAll("inputError");
+			// puestoChoice.getStyleClass().remove("inputError");
+			Set<PonderacionNecesariaDTO> ponderacionesNecesariasDTO = puestoDTO.getCaracteristicasDTO();
+			ponderacionNecesariaDTOOl = FXCollections.observableArrayList(ponderacionesNecesariasDTO)
+					.sorted((ponderacion1, ponderacion2) -> Boolean.compare(ponderacion1.getEvaluable(),
+							ponderacion2.getEvaluable()));
+			candidatoTable.setItems(ponderacionNecesariaDTOOl);
+		}
+
 	}
 }

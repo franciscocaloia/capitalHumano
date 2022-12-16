@@ -23,17 +23,17 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
     	
     	//evaluar coandidato
-//    	scene = new Scene(loadFXML("candidato/EvaluarCandidatos"));
-//    	 ControllerGraficoEvaluarCandidatos controllerGraficoEvaluarCandidatos = (ControllerGraficoEvaluarCandidatos)fxmlLoader.getController();
-//    	 controllerGraficoEvaluarCandidatos.setStageAndSetupListeners(stage);
-//    
+    	scene = new Scene(loadFXML("candidato/EvaluarCandidatos"));
+    	 ControllerGraficoEvaluarCandidatos controllerGraficoEvaluarCandidatos = (ControllerGraficoEvaluarCandidatos)fxmlLoader.getController();
+    	 controllerGraficoEvaluarCandidatos.setStageAndSetupListeners(stage);
+    
     	//gestionar
     //	scene = new Scene(loadFXML("puesto/GestionarPuesto--inicio"));
     	 //////////////////////////
     //Flujo desde autenticar
- 	  	 scene = new Scene(loadFXML("usuario/AutenticacionDeUsuario--inicio"));
- 		 ControllerGraficoAutenticarUsuario controllerGrafico = (ControllerGraficoAutenticarUsuario)fxmlLoader.getController();
- 	 	 controllerGrafico.setStageAndSetupListeners(stage);
+ 	 // 	 scene = new Scene(loadFXML("usuario/AutenticacionDeUsuario--inicio"));
+ 	//	 ControllerGraficoAutenticarUsuario controllerGrafico = (ControllerGraficoAutenticarUsuario)fxmlLoader.getController();
+ 	 //	 controllerGrafico.setStageAndSetupListeners(stage);
     	 //////////////////////
         stage.setScene(scene); 
         stage.setResizable(false);
